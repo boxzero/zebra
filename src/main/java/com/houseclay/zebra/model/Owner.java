@@ -1,13 +1,12 @@
 package com.houseclay.zebra.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 
@@ -16,11 +15,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "owner")
+@Builder
 public class Owner {
     @Id
-    @Column(name="owner_id")
-    private long owner_id;
-    @Column(name="owner_name")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID owner_id;
+
     private String owner_name;
 
     private String owner_email;
@@ -30,6 +31,7 @@ public class Owner {
     private String owner_pan;
 
     private String owner_contact_addr;
+
 
     private String notes;
 

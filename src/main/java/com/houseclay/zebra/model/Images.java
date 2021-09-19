@@ -1,19 +1,43 @@
 package com.houseclay.zebra.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * Images Size should be designed to fit in houseclay portal
+ *
+ * 1. Default Size
+ * 2. Full Size for Details Page
+ * 3.
  */
 @Entity
 @Table(name = "images")
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder(toBuilder = true)
 public class Images {
 
     @Id
-    private long image_id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID image_id;
+
+    private String name;
+
+    private String contentType;
+
+    private Long size;
+
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String original_image;
+    private byte[] image_data;
 
 
 }
+

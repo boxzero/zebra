@@ -5,32 +5,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Data
-@AllArgsConstructor
+@Table(name = "image")
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Builder(toBuilder = true)
-@Table(name = "users")
-public class User {
+public class Image {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    private UUID image_id;
 
-    private String username;
+    private String name;
 
-    private String password;
+    private String contentType;
 
-    private String role;
+    private Long size;
 
-
-
-
+    @Lob
+    private byte[] image_data;
 }

@@ -1,20 +1,29 @@
 package com.houseclay.zebra.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.UUID;
 
 @Entity
 @Table(name = "amenities")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder(toBuilder = true)
 public class Amenities {
 
-    private long amenities_id;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID amenities_id;
     private boolean lift;
     private boolean club_house;
     private boolean intercom;
