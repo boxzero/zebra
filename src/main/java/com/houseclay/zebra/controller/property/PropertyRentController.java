@@ -1,6 +1,7 @@
-package com.houseclay.zebra.controller;
+package com.houseclay.zebra.controller.property;
 
 
+import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.model.PropertyRent;
 import com.houseclay.zebra.service.ImagesService;
 import com.houseclay.zebra.service.impl.PropertyRentServiceImpl;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.ws.rs.Consumes;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/post-property-for-rent")
@@ -22,28 +24,10 @@ public class PropertyRentController {
 
     @Autowired
     PropertyRentServiceImpl propertyRentService;
-
     @Autowired
     ImagesService imagesService;
-    /**
-     * Deprecated EndPoint use v2
-     * @param property_for_rent
-     * @return
-     */
-    @Deprecated
-    @PostMapping("/v1/residential")
-    public ResponseEntity<PropertyRent> saveResidentialPropertyForRentv1(@RequestBody PropertyRent property_for_rent){
-        return new ResponseEntity<PropertyRent>(propertyRentService.saveResidentialPropertyForRent(property_for_rent),
-                HttpStatus.CREATED);
-    }
 
 
-    /**
-     * Endpoint to save a Property with Images
-     * @param jsonProperty
-     * @param files
-     * @return
-     */
     @PostMapping("/v2/residential")
     @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<PropertyRent> saveResidentialPropertyForRentv2(@RequestPart("property_for_rent") String jsonProperty,
@@ -56,6 +40,55 @@ public class PropertyRentController {
 
     }
 
+
+    //Get all the details of the property including the owner Details
+    @GetMapping("/v1/detail/{id}")
+    public ResponseEntity<PropertyRentDTO> propertyRentDetails(@PathVariable("id") UUID property_id){
+
+        PropertyRentDTO propertyRentDTO = propertyRentService.findPropertyForRentById(property_id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(propertyRentDTO);
+
+    }
+
+    @DeleteMapping("/v1/delete/{id}")
+    public ResponseEntity<String> deleteResidentialPropertyForRent(@PathVariable("id") UUID property_id){
+
+        Boolean value= propertyRentService.deletePropertyForRentById(property_id);
+        if(value){
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .body("Deleted");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Could not Delete as Property is Not Available");
+        }
+
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updateResidentialPropertyForRent(@PathVariable("id") UUID property_id){
+
+        return null;
+    }
+
+
+    /**
+     * ----------------------------BELOW DEPRECATED ENDPOINTS---------------------
+     */
+
+
+    /**
+     * Deprecated EndPoint use v2
+     * @param property_for_rent
+     * @return
+     */
+    @Deprecated
+    @PostMapping("/v1/residential")
+    public ResponseEntity<PropertyRent> saveResidentialPropertyForRentv1(@RequestBody PropertyRent property_for_rent){
+        return new ResponseEntity<PropertyRent>(propertyRentService.saveResidentialPropertyForRent(property_for_rent),
+                HttpStatus.CREATED);
+    }
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFiles(@RequestParam("file")MultipartFile file) {
 

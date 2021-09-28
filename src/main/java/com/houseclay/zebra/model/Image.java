@@ -9,6 +9,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.UUID;
 
+/**
+ * This class is a test image class. Refer to Images Entity , which is actually used
+ */
 @Entity
 @Table(name = "image")
 @NoArgsConstructor

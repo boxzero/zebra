@@ -27,58 +27,20 @@ public class PropertyRent {
     @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
     private UUID property_id;
 
-
     @Column(nullable = false)
     private String name;  //name of the society or apartment or the building
 
-
     @Column(nullable = false)
     private String title;
-
-
-    @OneToOne(targetEntity = Address.class,cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id",referencedColumnName = "addr_id")
-    private Address full_address;
-
 
     @OneToOne(targetEntity = Owner.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_reference_id",referencedColumnName = "owner_id")
     private Owner owner;
 
-
     private boolean isManaged;
 
-    @Column(nullable = false)
-    private String type;     // apartment , society , standalone
-
-    private double super_area;
-
-    private double carpet_area;
-
-    @Column(nullable = false)
-    private int beds;
-
-    @Column(nullable = false)
-    private int bath;
-
-    @Column(nullable = false)
-    private int balcony;
-
-    @Column(nullable = false)
-    private String parking ; //Car and Bike , Only Car
-
-
-    private String facing ;
-
-    @Column(nullable = false)
-    private String property_age ;
-
-    @Column(nullable = false)
-    private String furnishing;
-
-
-    private String flooring;
-
+    @Embedded
+    PropertySpecs propertySpecs;
 
     @OneToMany(targetEntity = Images.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "imageMap",referencedColumnName = "property_id")
@@ -86,7 +48,6 @@ public class PropertyRent {
 
     @Column(nullable = false)
     private boolean active_status;
-
 
     private String inactive_reason;
 
@@ -101,23 +62,6 @@ public class PropertyRent {
 
     @Column(nullable = false)
     private double property_maintenance;
-
-    @Column(nullable = false)
-    private String city;
-
-    @Column(nullable = false)
-    private String description;
-
-
-    @OneToOne(targetEntity = Amenities.class,cascade = CascadeType.ALL)
-    @JoinColumn(name = "amenitiesMap",referencedColumnName = "amenities_id")
-    private Amenities amenitiesMap;
-
-    private String latitude;
-
-    private String longitude;
-
-    private String locationurl;
 
     private String preferred_tenant_type;
 

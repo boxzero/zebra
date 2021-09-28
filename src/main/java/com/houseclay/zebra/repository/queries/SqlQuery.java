@@ -5,6 +5,6 @@ package com.houseclay.zebra.repository.queries;
  */
 public class SqlQuery {
 
-    public static final String QUERY1="";
+    public static final String LISTOFPROPERTYIMAGES="SELECT * FROM IMAGES WHERE image_map=?1";
 
 }

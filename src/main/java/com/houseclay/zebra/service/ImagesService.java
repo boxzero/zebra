@@ -14,7 +14,11 @@ public class ImagesService {
     @Autowired
     ImageRepository imagesRepository;
 
-
+    /**
+     * Deprecated
+     * @param file
+     * @throws IOException
+     */
     public void save(MultipartFile file) throws IOException {
         Image image = Image.builder().
                 name(StringUtils.cleanPath(file.getOriginalFilename()))
