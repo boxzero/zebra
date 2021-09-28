@@ -1,4 +1,4 @@
-package com.houseclay.zebra.model.response;
+package com.houseclay.zebra.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

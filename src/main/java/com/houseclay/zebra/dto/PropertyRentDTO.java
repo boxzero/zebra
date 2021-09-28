@@ -1,15 +1,12 @@
 package com.houseclay.zebra.dto;
 
-import com.houseclay.zebra.model.Images;
-import com.houseclay.zebra.model.Owner;
+import com.houseclay.zebra.model.rental.Owner;
 import com.houseclay.zebra.model.PropertySpecs;
-import com.houseclay.zebra.model.response.ImageResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;

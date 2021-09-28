@@ -1,4 +1,4 @@
-package com.houseclay.zebra.model;
+package com.houseclay.zebra.model.tenant;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,32 +9,29 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.UUID;
 
-
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "owner")
-@Builder
-public class Owner {
+@NoArgsConstructor
+@Builder(toBuilder = true)
+@Table(name = "tenant")
+public class Tenant {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID owner_id;
+    private UUID tenant_id;
 
-    private String owner_name;
+    @Embedded
+    private TenantProfile tenantProfile;
 
-    private String owner_email;
+    private boolean isActive; //By Default Make is Deactivated
 
-    private String owner_contact;
+    private boolean isEmailVerified;
 
-    private String owner_pan;
-
-    private String owner_contact_addr;
-
+    private boolean isPhoneVerified;
 
     private String notes;
-
 
 
 

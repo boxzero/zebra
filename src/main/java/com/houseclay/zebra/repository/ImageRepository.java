@@ -1,7 +1,7 @@
 package com.houseclay.zebra.repository;
 
 import com.houseclay.zebra.model.Image;
-import com.houseclay.zebra.model.Images;
+import com.houseclay.zebra.model.rental.Images;
 import com.houseclay.zebra.repository.queries.SqlQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

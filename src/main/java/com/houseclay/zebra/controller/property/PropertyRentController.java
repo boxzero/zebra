@@ -2,7 +2,7 @@ package com.houseclay.zebra.controller.property;
 
 
 import com.houseclay.zebra.dto.PropertyRentDTO;
-import com.houseclay.zebra.model.PropertyRent;
+import com.houseclay.zebra.model.rental.PropertyRent;
 import com.houseclay.zebra.service.ImagesService;
 import com.houseclay.zebra.service.impl.PropertyRentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

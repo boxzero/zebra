@@ -1,11 +1,8 @@
 package com.houseclay.zebra.service;
 
 import com.houseclay.zebra.dto.PropertyRentDTO;
-import com.houseclay.zebra.model.PropertyRent;
-import org.springframework.http.ResponseEntity;
-import sun.misc.UUDecoder;
+import com.houseclay.zebra.model.rental.PropertyRent;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface PropertRentService {
