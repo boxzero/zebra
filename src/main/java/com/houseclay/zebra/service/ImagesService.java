@@ -1,6 +1,6 @@
 package com.houseclay.zebra.service;
 
-import com.houseclay.zebra.model.Image;
+import com.houseclay.zebra.model.deletelater.Image;
 import com.houseclay.zebra.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

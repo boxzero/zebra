@@ -1,7 +1,7 @@
 package com.houseclay.zebra.dto;
 
 import com.houseclay.zebra.model.rental.Owner;
-import com.houseclay.zebra.model.PropertySpecs;
+import com.houseclay.zebra.model.common.PropertySpecs;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

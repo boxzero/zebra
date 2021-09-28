@@ -1,7 +1,7 @@
 package com.houseclay.zebra.model.rental;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.houseclay.zebra.model.PropertySpecs;
+import com.houseclay.zebra.model.common.PropertySpecs;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 

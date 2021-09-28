@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Data
@@ -13,11 +14,17 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TenantProfile {
 
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(unique = true,nullable = false)
     private String emailId;
+
     private NationalID nationalID;
+    @Column(nullable = false,unique = true)
     private String contactNumber;
+
     private String permanentAddress;
 
 

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class Tenant {
     private boolean isEmailVerified;
 
     private boolean isPhoneVerified;
-
+    @Column(nullable = true,columnDefinition ="VARCHAR(MAX)")
     private String notes;
 
 

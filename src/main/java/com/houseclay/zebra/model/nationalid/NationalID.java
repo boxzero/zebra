@@ -23,14 +23,13 @@ public class NationalID {
     @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    private String nationalIdType;
+    private NationalIDType nationalIdType;
 
     private String nationalIDNumber; //make this encrypted
 
     @OneToOne(targetEntity = NationalIdDocument.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "document_file",referencedColumnName = "national_doc_id")
     private NationalIdDocument nationalIdDocument;
-
 
     private boolean isVerfied; //verify by the houseclay captain
 }

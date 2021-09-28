@@ -1,4 +1,4 @@
-package com.houseclay.zebra.model;
+package com.houseclay.zebra.model.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

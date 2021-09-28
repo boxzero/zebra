@@ -1,4 +1,4 @@
-package com.houseclay.zebra.model;
+package com.houseclay.zebra.model.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

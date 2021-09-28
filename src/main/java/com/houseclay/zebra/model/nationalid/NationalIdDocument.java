@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "tbl_national_id_docs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
