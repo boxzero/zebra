@@ -3,6 +3,7 @@ package com.houseclay.zebra.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.model.rental.Images;
 import com.houseclay.zebra.model.rental.PropertyRent;
@@ -101,11 +102,9 @@ public class PropertyRentServiceImpl implements PropertRentService {
                 property_rent(proRent.getProperty_rent())
                 .property_maintenance(proRent.getProperty_maintenance()).
                 preferred_tenant_type(proRent.getPreferred_tenant_type()).
-                created_by(proRent.getCreated_by()).created_on(proRent.getCreated_on()).
-                changed_by(proRent.getChanged_by()).changed_on(proRent.getChanged_on()).
                 build();
 
-        return propertyRentDTO;
+         return propertyRentDTO;
     }
 
     private ImageResponse mapToImageResponse(Images image){

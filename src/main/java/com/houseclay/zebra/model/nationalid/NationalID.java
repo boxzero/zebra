@@ -1,5 +1,6 @@
 package com.houseclay.zebra.model.nationalid;
 
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +16,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Embeddable
 public class NationalID {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    private UUID national_id;
 
     private NationalIDType nationalIdType;
 
@@ -32,4 +32,8 @@ public class NationalID {
     private NationalIdDocument nationalIdDocument;
 
     private boolean isVerfied; //verify by the houseclay captain
+
+    @Embedded
+    private BaseTimeStamp baseTimeStamp;
+
 }

@@ -1,5 +1,6 @@
 package com.houseclay.zebra.model.rental;
 
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,5 +40,7 @@ public class Images {
     private byte[] image_data;
 
 
+    @Embedded
+    private BaseTimeStamp baseTimeStamp;
 }
 

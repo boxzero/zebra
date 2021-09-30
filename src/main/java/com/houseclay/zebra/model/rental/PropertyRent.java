@@ -1,7 +1,10 @@
 package com.houseclay.zebra.model.rental;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.model.common.PropertySpecs;
+import com.houseclay.zebra.model.tenant.Tenant;
+import com.houseclay.zebra.model.tenant.TenantProfile;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -41,7 +44,7 @@ public class PropertyRent {
     PropertySpecs propertySpecs;
 
     @OneToMany(targetEntity = Images.class,cascade = CascadeType.ALL)
-    @JoinColumn(name = "imageMap",referencedColumnName = "property_id")
+    @JoinColumn(name = "mapped_property",referencedColumnName = "property_id")
     private List<Images> imageMap;
 
     @Column(nullable = false)
@@ -63,17 +66,12 @@ public class PropertyRent {
 
     private String preferred_tenant_type;
 
-    @Column(nullable = false)
-    private String created_by;
+    @OneToMany(targetEntity = Tenant.class,cascade = CascadeType.ALL)
+    @JoinColumn(name="mapped_to_property",referencedColumnName = "property_id")
+    private List<Tenant> tenantList;
 
-    @Column(nullable = false)
-    private Date created_on;
-
-
-    private String changed_by;
-
-
-    private Date changed_on;
+    @Embedded
+    private BaseTimeStamp baseTimeStamp;
 
 
 

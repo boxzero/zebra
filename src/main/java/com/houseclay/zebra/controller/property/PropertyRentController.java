@@ -51,6 +51,8 @@ public class PropertyRentController {
 
     }
 
+
+
     @DeleteMapping("/v1/delete/{id}")
     public ResponseEntity<String> deleteResidentialPropertyForRent(@PathVariable("id") UUID property_id){
 

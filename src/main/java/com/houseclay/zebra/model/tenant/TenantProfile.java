@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +20,10 @@ public class TenantProfile {
     @Column(unique = true,nullable = false)
     private String emailId;
 
+    @OneToOne(targetEntity = NationalID.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "ref_national_id",referencedColumnName = "national_id")
     private NationalID nationalID;
+
     @Column(nullable = false,unique = true)
     private String contactNumber;
 

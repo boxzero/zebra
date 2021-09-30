@@ -1,5 +1,6 @@
 package com.houseclay.zebra.model.rental;
 
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +36,8 @@ public class Owner {
 
     private String notes;
 
-
+    @Embedded
+    private BaseTimeStamp baseTimeStamp;
 
 
 }

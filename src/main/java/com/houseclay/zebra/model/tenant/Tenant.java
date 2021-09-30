@@ -1,5 +1,6 @@
 package com.houseclay.zebra.model.tenant;
 
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "tenant")
+@Table(name = "tbl_tenant")
 public class Tenant {
 
     @Id
@@ -31,9 +32,12 @@ public class Tenant {
     private boolean isEmailVerified;
 
     private boolean isPhoneVerified;
-    @Column(nullable = true,columnDefinition ="VARCHAR(MAX)")
+
+    @Column(nullable = true)
     private String notes;
 
+    @Embedded
+    private BaseTimeStamp baseTimeStamp;
 
 
 }
