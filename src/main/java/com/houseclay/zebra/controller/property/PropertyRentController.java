@@ -5,6 +5,7 @@ import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.model.rental.PropertyRent;
 import com.houseclay.zebra.service.ImagesService;
 import com.houseclay.zebra.service.impl.PropertyRentServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +28,7 @@ public class PropertyRentController {
     @Autowired
     ImagesService imagesService;
 
-
+    @ApiOperation(value="Post a Property",response = PropertyRent.class)
     @PostMapping("/v2/residential")
     @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<PropertyRent> saveResidentialPropertyForRentv2(@RequestPart("property_for_rent") String jsonProperty,
