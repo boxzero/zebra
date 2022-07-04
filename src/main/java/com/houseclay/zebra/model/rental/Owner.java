@@ -1,5 +1,6 @@
 package com.houseclay.zebra.model.rental;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "owner")
-@Builder
+@Builder(toBuilder = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Owner {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -36,8 +38,6 @@ public class Owner {
 
     private String notes;
 
-    @Embedded
-    private BaseTimeStamp baseTimeStamp;
 
 
 }

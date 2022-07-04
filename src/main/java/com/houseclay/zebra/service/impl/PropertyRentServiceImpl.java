@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.houseclay.zebra.dto.PropertyRentDTO;
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.model.rental.Images;
 import com.houseclay.zebra.model.rental.PropertyRent;
 import com.houseclay.zebra.dto.ImageResponse;
@@ -21,10 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -101,7 +100,8 @@ public class PropertyRentServiceImpl implements PropertRentService {
                 available_from(proRent.getAvailable_from()).
                 property_rent(proRent.getProperty_rent())
                 .property_maintenance(proRent.getProperty_maintenance()).
-                preferred_tenant_type(proRent.getPreferred_tenant_type()).
+                preferred_tenant_type(proRent.getPreferred_tenant_type()).created_by(proRent.getBaseTimeStamp().getCreated_by())
+                        .created_on(proRent.getBaseTimeStamp().getCreated_on()).
                 build();
 
          return propertyRentDTO;
@@ -112,7 +112,7 @@ public class PropertyRentServiceImpl implements PropertRentService {
         String downloadUrl= ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/files/").path(image.getImage_id().toString()).toUriString();
 
-        ImageResponse imageResponse = ImageResponse.builder()
+        ImageResponse imageResponse = ImageResponse.builder().id(image.getImage_id())
                 .name(image.getName()).contentType(image.getContentType())
                 .size(image.getSize()).url(downloadUrl).build();
         return imageResponse;
@@ -134,10 +134,14 @@ public class PropertyRentServiceImpl implements PropertRentService {
         try{
             ObjectMapper objectMapper = new ObjectMapper();
             propertyRentJson = objectMapper.readValue(jsonProperty,PropertyRent.class);
+            System.out.println(propertyRentJson);
         } catch (JsonMappingException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
         }
 
 
@@ -149,7 +153,7 @@ public class PropertyRentServiceImpl implements PropertRentService {
             try {
                 image = Images.builder().
                         name(StringUtils.cleanPath(f.getOriginalFilename())).
-                        contentType(f.getContentType())
+                        contentType(f.getContentType()).baseTimeStamp(BaseTimeStamp.builder().created_by("SYSTEM").created_on(new Date()).build())
                         .size(f.getSize()).image_data(f.getBytes()).build();
             } catch (IOException e) {
                 e.printStackTrace();

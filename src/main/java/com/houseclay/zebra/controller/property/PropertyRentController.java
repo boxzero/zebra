@@ -88,6 +88,7 @@ public class PropertyRentController {
      */
     @Deprecated
     @PostMapping("/v1/residential")
+    @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<PropertyRent> saveResidentialPropertyForRentv1(@RequestBody PropertyRent property_for_rent){
         return new ResponseEntity<PropertyRent>(propertyRentService.saveResidentialPropertyForRent(property_for_rent),
                 HttpStatus.CREATED);
