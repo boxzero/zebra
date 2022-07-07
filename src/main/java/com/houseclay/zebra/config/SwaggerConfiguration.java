@@ -60,7 +60,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
     private ApiInfo metaData(){
        ApiInfo apiInfo = new ApiInfo("HouseClay(Zebra) Backend Portal", "Apis for Backend", "1.0.0",
-               "Terms of Service", new Contact("HouseClay","www.houseclay.com","support@houseclay.com").toString(),"HouseClay Licence","http://www.houseclay.com");
+               "Terms of Service", new Contact("HouseClay","http://www.houseclay.com","support@houseclay.com").toString(),"HouseClay Licence","http://www.houseclay.com");
     return apiInfo;
     }
 }
