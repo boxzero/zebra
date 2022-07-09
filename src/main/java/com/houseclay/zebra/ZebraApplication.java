@@ -32,10 +32,9 @@ public class ZebraApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		//creating role
 
-		userService.saveRole(new Role(null,"ROLE_USER"));
-		userService.saveRole(new Role(null,"ROLE_MANAGER"));
-		userService.saveRole(new Role(null,"ROLE_ADMIN"));
-		userService.saveRole(new Role(null,"ROLE_SUPER_ADMIN"));
+		userService.saveRole(new Role(null,"ROLE_USER")); // 3rd Party User - Non HouseClay People
+		userService.saveRole(new Role(null,"ROLE_MANAGER")); //HouseClay Working People
+		userService.saveRole(new Role(null,"ROLE_SUPER_ADMIN")); // Ankit and Arpit Only
 
 		userService.registerUser(new User(null,"ankit.biswas9@gmail.com","password",new ArrayList<>(),"Ankit","Biswas","7892014327",true,true,false,"No Noted mentioned"));
 		userService.registerUser(new User(null,"arpit.biswas@gmail.com","password",new ArrayList<>(),"Arpit","Biswas","8910669953",true,true,false,"No Noted mentioned"));
@@ -43,10 +42,10 @@ public class ZebraApplication implements CommandLineRunner {
 		userService.registerUser(new User(null,"ravish.chauvey@gmail.com","password",new ArrayList<>(),"Ravish","Chaubey","7892013327",true,true,false,"No Noted mentioned"));
 
 
-		userService.addRoleToUser("ankit.biswas9@gmail.com","ROLE_ADMIN");
-		userService.addRoleToUser("arpit.biswas@gmail.com","ROLE_MANAGER");
+		userService.addRoleToUser("ankit.biswas9@gmail.com","ROLE_SUPER_ADMIN");
+		userService.addRoleToUser("arpit.biswas@gmail.com","ROLE_SUPER_ADMIN");
 		userService.addRoleToUser("john.doe@gmail.com","ROLE_USER");
-		userService.addRoleToUser("ravish.chauvey@gmail.com","ROLE_SUPER_ADMIN");
-		userService.addRoleToUser("ankit.biswas9@gmail.com","ROLE_USER");
+		userService.addRoleToUser("ravish.chauvey@gmail.com","ROLE_MANAGER");
+		userService.addRoleToUser("ankit.biswas9@gmail.com","ROLE_MANAGER");
 	}
 }

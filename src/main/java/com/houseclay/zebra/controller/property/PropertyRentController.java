@@ -5,6 +5,7 @@ import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.model.rental.PropertyRent;
 import com.houseclay.zebra.service.ImagesService;
 import com.houseclay.zebra.service.impl.PropertyRentServiceImpl;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Api(tags = "Rental Properties")
 @RequestMapping(value = "/post-property-for-rent")
 public class PropertyRentController {
 
