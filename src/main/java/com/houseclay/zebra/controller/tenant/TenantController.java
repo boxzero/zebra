@@ -3,6 +3,7 @@ package com.houseclay.zebra.controller.tenant;
 
 
 import com.houseclay.zebra.model.tenant.Tenant;
+import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Api(tags = "Tenant Management")
 @RequestMapping(value = "/tenant-management")
 public class TenantController {
 

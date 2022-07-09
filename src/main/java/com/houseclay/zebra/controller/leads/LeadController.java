@@ -1,6 +1,7 @@
 package com.houseclay.zebra.controller.leads;
 
 import com.houseclay.zebra.model.lead.Lead;
+import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 
 @RestController
+@Api(tags = "Lead Manager")
 @RequestMapping(value = "/lead-manager")
 public class LeadController {
 

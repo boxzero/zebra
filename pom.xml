@@ -56,11 +56,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -100,6 +96,13 @@
 		</dependency>
 
 		<!-- Jackson end-->
+
+		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 
 
 	</dependencies>

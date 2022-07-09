@@ -5,10 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
@@ -24,13 +24,24 @@ public class User {
     @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    private String username;
+    private String username; // it should be email
 
     private String password;
 
-    private String role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<Role> roles = new ArrayList<>();
 
+    private String firstName;
 
+    private String lastName;
 
+    private String contactNumber;
 
+    private boolean active;
+
+    private boolean isEmailVerified;
+
+    private boolean isPhoneVerified;
+
+    private String notes;
 }
