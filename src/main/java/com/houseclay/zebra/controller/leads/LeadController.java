@@ -1,7 +1,11 @@
 package com.houseclay.zebra.controller.leads;
 
 import com.houseclay.zebra.model.lead.Lead;
+import com.houseclay.zebra.service.LeadService;
+import com.houseclay.zebra.service.impl.LeadServiceImpl;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +16,19 @@ import java.util.UUID;
 
 @RestController
 @Api(tags = "Lead Manager")
+@CrossOrigin(origins = {"http://localhost:3000","http://192.168.1.4"},allowCredentials = "true")
 @RequestMapping(value = "/lead-manager")
 public class LeadController {
 
-
+    @Autowired
+    LeadServiceImpl leadService;
 
 
     @PostMapping(value = "/v1/add-lead")
     public ResponseEntity<String> addLead(@RequestBody Lead lead){
-        return null;
+        Lead l= leadService.saveNewLead(lead);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Lead Saved Successfully -- "+l.getFirstName());
     }
 
     //get all leads with trashed

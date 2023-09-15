@@ -48,6 +48,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/zebra/login");
+        http.cors();
         http.csrf().disable(); // disable this token mechanism to use our own token mechanism
         http.sessionManagement().sessionCreationPolicy(STATELESS); // session management will be stateless
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
