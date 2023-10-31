@@ -46,6 +46,6 @@ public class ZebraApplication implements CommandLineRunner {
 		userService.addRoleToUser("arpit.biswas@gmail.com","ROLE_SUPER_ADMIN");
 		userService.addRoleToUser("john.doe@gmail.com","ROLE_USER");
 		userService.addRoleToUser("ravish.chauvey@gmail.com","ROLE_MANAGER");
-		userService.addRoleToUser("ankit.biswas9@gmail.com","ROLE_MANAGER");
+
 	}
 }
