@@ -30,6 +30,8 @@ public class NewLeadTenantDTO {
 
     private ArrayList<String> preferredLocations;
 
+    private ArrayList<String> assetConfigurations;
+
     private Date occupancyDate;
 
     private Boolean isDateFlexible;

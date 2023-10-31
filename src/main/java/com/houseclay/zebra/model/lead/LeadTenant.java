@@ -39,10 +39,11 @@ public class LeadTenant{
 
     private String preferredLocations;
 
+    private String assetConfigurations;
+
     private Date occupancyDate;
 
     private Boolean isDateFlexible;
-
 
     private String tenantType ; // family, bachelors, company
 

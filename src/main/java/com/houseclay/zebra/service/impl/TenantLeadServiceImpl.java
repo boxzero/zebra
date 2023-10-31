@@ -50,7 +50,10 @@ public class TenantLeadServiceImpl implements TenantLeadService {
                                 .baseTimeStamp(BaseTimeStamp.builder().created_by(newLeadTenantDTO.getLead().getBaseTimeStamp().getCreated_by()).created_on(Date.from(Instant.now())).build())
                         .build()).minBudget(newLeadTenantDTO.getMinBudget()).maxBudget(newLeadTenantDTO.getMaxBudget())
                 .propertyType(newLeadTenantDTO.getPropertyType()).leadStatus(String.valueOf(LeadStatus.valueOf(NEW.label))).
-                preferredLocations(objectMapperUtils.extractPreferredLocationfromList(newLeadTenantDTO.getPreferredLocations())).
+//                preferredLocations(objectMapperUtils.extractPreferredLocationfromList(newLeadTenantDTO.getPreferredLocations())).
+//                assetConfigurations(objectMapperUtils.extractAssetConfigurationfromList(newLeadTenantDTO.getAssetConfigurations())).
+                preferredLocations(objectMapperUtils.extractList(newLeadTenantDTO.getPreferredLocations())).
+                assetConfigurations(objectMapperUtils.extractList(newLeadTenantDTO.getAssetConfigurations())).
                 occupancyDate(newLeadTenantDTO.getOccupancyDate()).isDateFlexible(newLeadTenantDTO.getIsDateFlexible()).tenantType(newLeadTenantDTO.getTenantType())
                 .isVegetarian(newLeadTenantDTO.getIsVegetarian()).isHavingPets(newLeadTenantDTO.getIsHavingPets()).isLookingForARoom(newLeadTenantDTO.getIsLookingForARoom())
                 .build();
