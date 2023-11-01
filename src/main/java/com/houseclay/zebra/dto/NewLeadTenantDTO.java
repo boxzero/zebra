@@ -26,7 +26,7 @@ public class NewLeadTenantDTO {
 
     private PropertyType propertyType;
 
-    //private LeadStatus leadStatus;
+//    private LeadStatus leadStatus;
 
     private ArrayList<String> preferredLocations;
 
@@ -35,7 +35,6 @@ public class NewLeadTenantDTO {
     private Date occupancyDate;
 
     private Boolean isDateFlexible;
-
 
     private String tenantType ; // family, bachelors, company
 
