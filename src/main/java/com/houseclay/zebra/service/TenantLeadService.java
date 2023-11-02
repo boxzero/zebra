@@ -12,4 +12,5 @@ public interface TenantLeadService {
     Page<LeadTenant> findAllLeads(Pageable pageable);
     LeadTenant addTenantLead(NewLeadTenantDTO newLeadTenantDTO);
 
+
 }
