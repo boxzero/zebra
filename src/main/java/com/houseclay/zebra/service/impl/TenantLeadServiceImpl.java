@@ -1,16 +1,22 @@
 package com.houseclay.zebra.service.impl;
 
+import com.auth0.jwt.JWT;
 import com.houseclay.zebra.dto.NewLeadTenantDTO;
+import com.houseclay.zebra.model.User;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.model.lead.Lead;
 import com.houseclay.zebra.model.lead.LeadTenant;
+import com.houseclay.zebra.model.lead.enums.LeadSource;
 import com.houseclay.zebra.model.lead.enums.LeadStatus;
+import com.houseclay.zebra.model.lead.enums.PropertyType;
 import com.houseclay.zebra.repository.TenantLeadRepository;
 import com.houseclay.zebra.service.TenantLeadService;
 import com.houseclay.zebra.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Security;
@@ -18,7 +24,7 @@ import java.time.Instant;
 import java.util.Date;
 
 import static com.houseclay.zebra.model.lead.enums.LeadStatus.NEW;
-
+import static com.houseclay.zebra.model.lead.enums.PropertyType.GATED_APARTMENT;
 @Service
 public class TenantLeadServiceImpl implements TenantLeadService {
 
@@ -44,17 +50,18 @@ public class TenantLeadServiceImpl implements TenantLeadService {
                                 .lastName(newLeadTenantDTO.getLead().getLastName())
                                 .emailId(newLeadTenantDTO.getLead().getEmailId())
                                 .contactNumber(newLeadTenantDTO.getLead().getContactNumber())
-                                .isEmailVerified(newLeadTenantDTO.getLead().getIsEmailVerified()).isPhoneVerified(newLeadTenantDTO.getLead().getIsPhoneVerified())
-                                .notes(newLeadTenantDTO.getLead().getNotes()).leadType(newLeadTenantDTO.getLead().getLeadType())
+                                .isEmailVerified(newLeadTenantDTO.getLead().getIsEmailVerified())
+                                .isPhoneVerified(newLeadTenantDTO.getLead().getIsPhoneVerified())
+                                .notes(newLeadTenantDTO.getLead().getNotes())
+                                .leadType(newLeadTenantDTO.getLead().getLeadType())
                                 .leadSource(newLeadTenantDTO.getLead().getLeadSource())
-                                .baseTimeStamp(BaseTimeStamp.builder().created_by(newLeadTenantDTO.getLead().getBaseTimeStamp().getCreated_by()).created_on(Date.from(Instant.now())).build())
+                                .baseTimeStamp(BaseTimeStamp.builder().created_by(newLeadTenantDTO.getLead().getBaseTimeStamp().getCreated_by()).created_on(Date.from(Instant.now()))
+                                        .changed_by("gajanan").changed_on(Date.from(Instant.now())) .build())
                         .build()).minBudget(newLeadTenantDTO.getMinBudget()).maxBudget(newLeadTenantDTO.getMaxBudget())
-                .propertyType(newLeadTenantDTO.getPropertyType()).leadStatus(String.valueOf(LeadStatus.valueOf(NEW.label))).
-//                preferredLocations(objectMapperUtils.extractPreferredLocationfromList(newLeadTenantDTO.getPreferredLocations())).
-//                assetConfigurations(objectMapperUtils.extractAssetConfigurationfromList(newLeadTenantDTO.getAssetConfigurations())).
-                preferredLocations(objectMapperUtils.extractList(newLeadTenantDTO.getPreferredLocations())).
-                assetConfigurations(objectMapperUtils.extractList(newLeadTenantDTO.getAssetConfigurations())).
-                occupancyDate(newLeadTenantDTO.getOccupancyDate()).isDateFlexible(newLeadTenantDTO.getIsDateFlexible()).tenantType(newLeadTenantDTO.getTenantType())
+                .propertyType(newLeadTenantDTO.getPropertyType()).leadStatus(String.valueOf(LeadStatus.valueOf(NEW.label)))
+                .preferredLocations(objectMapperUtils.extractList(newLeadTenantDTO.getPreferredLocations()))
+                .assetConfigurations(objectMapperUtils.extractList(newLeadTenantDTO.getAssetConfigurations()))
+                .occupancyDate(newLeadTenantDTO.getOccupancyDate()).isDateFlexible(newLeadTenantDTO.getIsDateFlexible()).tenantType(newLeadTenantDTO.getTenantType())
                 .isVegetarian(newLeadTenantDTO.getIsVegetarian()).isHavingPets(newLeadTenantDTO.getIsHavingPets()).isLookingForARoom(newLeadTenantDTO.getIsLookingForARoom())
                 .build();
     }

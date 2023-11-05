@@ -42,12 +42,14 @@ public class Lead {
 
     private Boolean isLeadConverted = false;
 
+    @Enumerated(EnumType.STRING)
     private LeadType leadType;
 
     private Boolean isLeadTrashed = false; //Unconverted Leads , Leads to be Blocked
 
     private String trashedReason;
 
+    @Enumerated(EnumType.STRING)
     private LeadSource leadSource; //Facebook, Online Sites , Reference , Zebra Web App
 
     @Embedded

@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @Table(name = "leads_tenants")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LeadTenant{
+public class LeadTenant {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -33,9 +34,12 @@ public class LeadTenant{
     private Long minBudget;
     private Long maxBudget;
 
+    //    private String propertyType;
+    @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
 
     private String leadStatus;
+    //    private LeadStatus leadStatus;
 
     private String preferredLocations;
 
@@ -45,11 +49,11 @@ public class LeadTenant{
 
     private Boolean isDateFlexible;
 
-    private String tenantType ; // family, bachelors, company
+    private String tenantType; // family, bachelors, company
 
-    private Boolean isVegetarian ;
+    private Boolean isVegetarian;
 
-    private Boolean isHavingPets ;
+    private Boolean isHavingPets;
 
-    private Boolean isLookingForARoom ;
+    private Boolean isLookingForARoom;
 }
