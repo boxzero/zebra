@@ -16,5 +16,4 @@ public interface TenantLeadService {
     NewLeadTenantDTO findTenantLeadById(UUID uuid);
     NewLeadTenantDTO updateTenantLeadById(NewLeadTenantDTO newLeadTenantDTO, UUID uuid);
 
-    NewLeadTenantDTO findTenantLeadById(UUID uuid);
 }
