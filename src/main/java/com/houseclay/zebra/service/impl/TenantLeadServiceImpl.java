@@ -1,7 +1,9 @@
 package com.houseclay.zebra.service.impl;
 
 import com.auth0.jwt.JWT;
+import com.houseclay.zebra.dto.ImageResponse;
 import com.houseclay.zebra.dto.NewLeadTenantDTO;
+import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.model.User;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.model.lead.Lead;
@@ -21,7 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Security;
 import java.time.Instant;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.houseclay.zebra.model.lead.enums.LeadStatus.NEW;
 import static com.houseclay.zebra.model.lead.enums.PropertyType.GATED_APARTMENT;
@@ -42,7 +45,59 @@ public class TenantLeadServiceImpl implements TenantLeadService {
         System.out.println(this.newLeadDTOMapper(newLeadTenantDTO));
         return tenantLeadRepository.save(this.newLeadDTOMapper(newLeadTenantDTO));
     }
+    /**
+     * This method is for converting the json String to PropertyRent object using ObjectMapper
+     * It is also binding the data of the Image List of Files into the PropertyRent Object
+     * @param uuid
+     * @return
+     */
+    public NewLeadTenantDTO findTenantLeadById(UUID uuid) {
+        Optional<LeadTenant> newLeadTenantByID= tenantLeadRepository.findById(uuid);
+        NewLeadTenantDTO newLeadTenantDTO;
+        try{
+            LeadTenant newLeadTenant = newLeadTenantByID.get();
+            newLeadTenantDTO= mapToNewLeadTenantDTO(newLeadTenant);
+        }
+        catch (Exception e){
+            throw new NullPointerException("The Property is Not Present");
+        }
+        return newLeadTenantDTO;
+    }
 
+ private NewLeadTenantDTO mapToNewLeadTenantDTO(LeadTenant leadTenant)
+ {
+     return NewLeadTenantDTO.builder()
+             .lead(Lead.builder()
+                     .firstName(leadTenant.getLead().getFirstName())
+                     .lastName(leadTenant.getLead().getLastName())
+                     .emailId(leadTenant.getLead().getEmailId())
+                     .contactNumber(leadTenant.getLead().getContactNumber())
+                     .isEmailVerified(leadTenant.getLead().getIsEmailVerified())
+                     .isPhoneVerified(leadTenant.getLead().getIsPhoneVerified())
+                     .notes(leadTenant.getLead().getNotes())
+                     .leadType(leadTenant.getLead().getLeadType())
+                     .leadSource(leadTenant.getLead().getLeadSource())
+                     .baseTimeStamp(BaseTimeStamp.builder()
+                             .created_by(leadTenant.getLead().getBaseTimeStamp().getCreated_by())
+                             .created_on(leadTenant.getLead().getBaseTimeStamp().getCreated_on())
+                             .changed_by(leadTenant.getLead().getBaseTimeStamp().getChanged_by())
+                             .changed_on(leadTenant.getLead().getBaseTimeStamp().getChanged_on())
+                             .build())
+                     .build())
+             .minBudget(leadTenant.getMinBudget())
+             .maxBudget(leadTenant.getMaxBudget())
+             .propertyType(leadTenant.getPropertyType())
+             //.leadStatus(String.valueOf(LeadStatus.valueOf(NEW.label)))
+             .preferredLocations(new ArrayList<>(Arrays.asList(leadTenant.getPreferredLocations().split("-"))))
+             .assetConfigurations(new ArrayList<>(Arrays.asList(leadTenant.getAssetConfigurations().split("-"))))
+             .occupancyDate(leadTenant.getOccupancyDate())
+             .isDateFlexible(leadTenant.getIsDateFlexible())
+             .tenantType(leadTenant.getTenantType())
+             .isVegetarian(leadTenant.getIsVegetarian())
+             .isHavingPets(leadTenant.getIsHavingPets())
+             .isLookingForARoom(leadTenant.getIsLookingForARoom())
+             .build();
+ }
 
     private LeadTenant newLeadDTOMapper(NewLeadTenantDTO newLeadTenantDTO) {
         return LeadTenant.builder().
