@@ -45,6 +45,7 @@ public class TenantLeadController {
                 .body(newLeadTenantDTO);
     }
 
+
     //Update Tenant lead by UUID
     @ApiOperation(value="Update Tenant Lead by Id",response = NewLeadTenantDTO.class)
     @PutMapping(value = "/edit/{tenant_lead_id}")

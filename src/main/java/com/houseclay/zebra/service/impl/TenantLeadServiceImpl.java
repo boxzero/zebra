@@ -64,6 +64,7 @@ public class TenantLeadServiceImpl implements TenantLeadService {
         return newLeadTenantDTO;
     }
 
+
     @Override
     public NewLeadTenantDTO updateTenantLeadById(NewLeadTenantDTO newLeadTenantDTO, UUID uuid) {
         Optional<LeadTenant> newLeadTenantByID= tenantLeadRepository.findById(uuid);
@@ -93,40 +94,10 @@ public class TenantLeadServiceImpl implements TenantLeadService {
         return newLeadTenantdto;
     }
 
-    private NewLeadTenantDTO mapToNewLeadTenantDTO(LeadTenant leadTenant)
- {
-     return NewLeadTenantDTO.builder()
-             .lead(Lead.builder()
-                     .firstName(leadTenant.getLead().getFirstName())
-                     .lastName(leadTenant.getLead().getLastName())
-                     .emailId(leadTenant.getLead().getEmailId())
-                     .contactNumber(leadTenant.getLead().getContactNumber())
-                     .isEmailVerified(leadTenant.getLead().getIsEmailVerified())
-                     .isPhoneVerified(leadTenant.getLead().getIsPhoneVerified())
-                     .notes(leadTenant.getLead().getNotes())
-                     .leadType(leadTenant.getLead().getLeadType())
-                     .leadSource(leadTenant.getLead().getLeadSource())
-                     .baseTimeStamp(BaseTimeStamp.builder()
-                             .created_by(leadTenant.getLead().getBaseTimeStamp().getCreated_by())
-                             .created_on(leadTenant.getLead().getBaseTimeStamp().getCreated_on())
-                             .changed_by(leadTenant.getLead().getBaseTimeStamp().getChanged_by())
-                             .changed_on(leadTenant.getLead().getBaseTimeStamp().getChanged_on())
-                             .build())
-                     .build())
-             .minBudget(leadTenant.getMinBudget())
-             .maxBudget(leadTenant.getMaxBudget())
-             .propertyType(leadTenant.getPropertyType())
-             //.leadStatus(String.valueOf(LeadStatus.valueOf(NEW.label)))
-             .preferredLocations(new ArrayList<>(Arrays.asList(leadTenant.getPreferredLocations().split("-"))))
-             .assetConfigurations(new ArrayList<>(Arrays.asList(leadTenant.getAssetConfigurations().split("-"))))
-             .occupancyDate(leadTenant.getOccupancyDate())
-             .isDateFlexible(leadTenant.getIsDateFlexible())
-             .tenantType(leadTenant.getTenantType())
-             .isVegetarian(leadTenant.getIsVegetarian())
-             .isHavingPets(leadTenant.getIsHavingPets())
-             .isLookingForARoom(leadTenant.getIsLookingForARoom())
-             .build();
- }
+    private NewLeadTenantDTO mapToNewLeadTenantDTO(LeadTenant leadTenant){
+        return null;
+    }
+
 
     private LeadTenant newLeadDTOMapper(NewLeadTenantDTO newLeadTenantDTO) {
         return LeadTenant.builder().
