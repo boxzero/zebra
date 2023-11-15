@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Security;
 import java.time.Instant;
-import java.util.Date;
+import java.util.*;
 
 import static com.houseclay.zebra.model.lead.enums.LeadStatus.NEW;
 import static com.houseclay.zebra.model.lead.enums.PropertyType.GATED_APARTMENT;
@@ -41,6 +41,102 @@ public class TenantLeadServiceImpl implements TenantLeadService {
     public LeadTenant addTenantLead(NewLeadTenantDTO newLeadTenantDTO) {
         System.out.println(this.newLeadDTOMapper(newLeadTenantDTO));
         return tenantLeadRepository.save(this.newLeadDTOMapper(newLeadTenantDTO));
+    }
+
+    /**
+     * This method is for fetching Tenant Lead By UUID
+     * @param uuid
+     * @return
+     */
+    public NewLeadTenantDTO findTenantLeadById(UUID uuid) {
+        Optional<LeadTenant> newLeadTenantByID= tenantLeadRepository.findById(uuid);
+        NewLeadTenantDTO newLeadTenantDTO;
+        try{
+            LeadTenant newLeadTenant = newLeadTenantByID.get();
+            newLeadTenantDTO= mapToNewLeadTenantDTO(newLeadTenant);
+        }
+        catch (Exception e){
+            throw new NullPointerException("The Property is Not Present");
+        }
+        return newLeadTenantDTO;
+    }
+
+
+    /**
+     * This method is for Updating Tenant Lead data
+     * @param newLeadTenantDTO, uuid
+     * @return
+     */
+    @Override
+    public NewLeadTenantDTO updateTenantLeadById(UUID uuid, NewLeadTenantDTO newLeadTenantDTO) {
+        Optional<LeadTenant> newLeadTenantByID= tenantLeadRepository.findById(uuid);
+        NewLeadTenantDTO newLeadTenantdto;
+
+        try{
+            LeadTenant  newLeadTenant = newLeadTenantByID.get();
+            BaseTimeStamp existingBaseTimeStamp = newLeadTenant.getLead().getBaseTimeStamp();
+
+            newLeadTenant.setLead(newLeadTenantDTO.getLead());
+
+            newLeadTenant.getLead().getBaseTimeStamp().setCreated_by(existingBaseTimeStamp.getCreated_by());
+            newLeadTenant.getLead().getBaseTimeStamp().setCreated_on(existingBaseTimeStamp.getCreated_on());
+
+            newLeadTenant.getLead().getBaseTimeStamp().setChanged_by("Ankit");
+            newLeadTenant.getLead().getBaseTimeStamp().setChanged_on(Date.from(Instant.now()));
+
+            newLeadTenant.setMinBudget(newLeadTenantDTO.getMinBudget());
+            newLeadTenant.setMaxBudget(newLeadTenantDTO.getMaxBudget());
+            newLeadTenant.setPropertyType(newLeadTenantDTO.getPropertyType());
+            newLeadTenant.setPreferredLocations(objectMapperUtils.extractList(newLeadTenantDTO.getPreferredLocations()));
+            newLeadTenant.setAssetConfigurations(objectMapperUtils.extractList(newLeadTenantDTO.getAssetConfigurations()));
+            newLeadTenant.setOccupancyDate(newLeadTenantDTO.getOccupancyDate());
+            newLeadTenant.setIsDateFlexible(newLeadTenantDTO.getIsDateFlexible());
+            newLeadTenant.setTenantType(newLeadTenantDTO.getTenantType());
+            newLeadTenant.setIsVegetarian(newLeadTenantDTO.getIsVegetarian());
+            newLeadTenant.setIsHavingPets(newLeadTenantDTO.getIsHavingPets());
+            newLeadTenant.setIsLookingForARoom(newLeadTenantDTO.getIsLookingForARoom());
+            LeadTenant newLeadTen = this.tenantLeadRepository.save(newLeadTenant);
+            newLeadTenantdto= mapToNewLeadTenantDTO(newLeadTen);
+        }
+        catch (Exception e){
+            throw new NullPointerException("The Property is Not Present " );
+        }
+        return newLeadTenantdto;
+    }
+
+    private NewLeadTenantDTO mapToNewLeadTenantDTO(LeadTenant leadTenant)
+    {
+        return NewLeadTenantDTO.builder()
+                .lead(Lead.builder()
+                        .firstName(leadTenant.getLead().getFirstName())
+                        .lastName(leadTenant.getLead().getLastName())
+                        .emailId(leadTenant.getLead().getEmailId())
+                        .contactNumber(leadTenant.getLead().getContactNumber())
+                        .isEmailVerified(leadTenant.getLead().getIsEmailVerified())
+                        .isPhoneVerified(leadTenant.getLead().getIsPhoneVerified())
+                        .notes(leadTenant.getLead().getNotes())
+                        .leadType(leadTenant.getLead().getLeadType())
+                        .leadSource(leadTenant.getLead().getLeadSource())
+                        .baseTimeStamp(BaseTimeStamp.builder()
+                                .created_by(leadTenant.getLead().getBaseTimeStamp().getCreated_by())
+                                .created_on(leadTenant.getLead().getBaseTimeStamp().getCreated_on())
+                                .changed_by(leadTenant.getLead().getBaseTimeStamp().getChanged_by())
+                                .changed_on(Date.from(Instant.now()))
+                                .build())
+                        .build())
+                .minBudget(leadTenant.getMinBudget())
+                .maxBudget(leadTenant.getMaxBudget())
+                .propertyType(leadTenant.getPropertyType())
+                //.leadStatus(String.valueOf(LeadStatus.valueOf(NEW.label)))
+                .preferredLocations(new ArrayList<>(Arrays.asList(leadTenant.getPreferredLocations().split("-"))))
+                .assetConfigurations(new ArrayList<>(Arrays.asList(leadTenant.getAssetConfigurations().split("-"))))
+                .occupancyDate(leadTenant.getOccupancyDate())
+                .isDateFlexible(leadTenant.getIsDateFlexible())
+                .tenantType(leadTenant.getTenantType())
+                .isVegetarian(leadTenant.getIsVegetarian())
+                .isHavingPets(leadTenant.getIsHavingPets())
+                .isLookingForARoom(leadTenant.getIsLookingForARoom())
+                .build();
     }
 
 
