@@ -86,6 +86,7 @@ public class TenantLeadServiceImpl implements TenantLeadService {
 
             newLeadTenant.setMinBudget(newLeadTenantDTO.getMinBudget());
             newLeadTenant.setMaxBudget(newLeadTenantDTO.getMaxBudget());
+            newLeadTenant.setLeadStatus(String.valueOf(newLeadTenantDTO.getLeadStatus()));
             newLeadTenant.setPropertyType(newLeadTenantDTO.getPropertyType());
             newLeadTenant.setPreferredLocations(objectMapperUtils.extractList(newLeadTenantDTO.getPreferredLocations()));
             newLeadTenant.setAssetConfigurations(objectMapperUtils.extractList(newLeadTenantDTO.getAssetConfigurations()));
@@ -115,7 +116,10 @@ public class TenantLeadServiceImpl implements TenantLeadService {
                         .isEmailVerified(leadTenant.getLead().getIsEmailVerified())
                         .isPhoneVerified(leadTenant.getLead().getIsPhoneVerified())
                         .notes(leadTenant.getLead().getNotes())
+                        .isLeadConverted(leadTenant.getLead().getIsLeadConverted())
                         .leadType(leadTenant.getLead().getLeadType())
+                        .isLeadTrashed(leadTenant.getLead().getIsLeadTrashed())
+                        .trashedReason(leadTenant.getLead().getTrashedReason())
                         .leadSource(leadTenant.getLead().getLeadSource())
                         .baseTimeStamp(BaseTimeStamp.builder()
                                 .created_by(leadTenant.getLead().getBaseTimeStamp().getCreated_by())
@@ -127,7 +131,7 @@ public class TenantLeadServiceImpl implements TenantLeadService {
                 .minBudget(leadTenant.getMinBudget())
                 .maxBudget(leadTenant.getMaxBudget())
                 .propertyType(leadTenant.getPropertyType())
-                //.leadStatus(String.valueOf(LeadStatus.valueOf(NEW.label)))
+                .leadStatus(LeadStatus.valueOf(leadTenant.getLeadStatus()))
                 .preferredLocations(new ArrayList<>(Arrays.asList(leadTenant.getPreferredLocations().split("-"))))
                 .assetConfigurations(new ArrayList<>(Arrays.asList(leadTenant.getAssetConfigurations().split("-"))))
                 .occupancyDate(leadTenant.getOccupancyDate())
