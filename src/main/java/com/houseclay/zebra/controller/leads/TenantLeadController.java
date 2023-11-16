@@ -38,7 +38,6 @@ public class TenantLeadController {
     //get a specific details of a lead
     @ApiOperation(value="Get Tenant Lead by Id",response = NewLeadTenantDTO.class)
     @GetMapping(value = "/get-lead/{id}")
-    //public ResponseEntity<LeadTenant> getTenantLead(@PathVariable("id")UUID lead_id) {
     public ResponseEntity<NewLeadTenantDTO> getTenantLead(@PathVariable("id")UUID lead_id) {
         NewLeadTenantDTO newLeadTenantDTO=  this.tenantLeadService.findTenantLeadById(lead_id);
         return  ResponseEntity.status(HttpStatus.OK)
