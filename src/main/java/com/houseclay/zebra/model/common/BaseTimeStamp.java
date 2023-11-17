@@ -17,10 +17,10 @@ import java.util.Date;
 @Embeddable
 public class BaseTimeStamp {
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String created_by;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Date created_on;
 
 

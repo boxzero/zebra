@@ -26,7 +26,7 @@ public class NewLeadTenantDTO {
 
     private PropertyType propertyType;
 
-//    private LeadStatus leadStatus;
+    private LeadStatus leadStatus;
 
     private ArrayList<String> preferredLocations;
 
