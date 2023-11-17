@@ -55,6 +55,27 @@ public class TenantLeadController {
                 .body(newLeadTenant);
     }
 
+    //Trash Tenant lead by UUID
+    @ApiOperation(value="Trash Tenant Lead by Id",response = NewLeadTenantDTO.class)
+    @PatchMapping(value = "/trash/{tenant_lead_id}")
+    public ResponseEntity<NewLeadTenantDTO> trashTenantLead(@RequestBody NewLeadTenantDTO newLeadTenantDTO,
+                                                             @PathVariable("tenant_lead_id")UUID lead_id) {
+        NewLeadTenantDTO newLeadTenant=  this.tenantLeadService.trashTenantLeadById(lead_id, newLeadTenantDTO);
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(newLeadTenant);
+    }
+
+    //Un Trash Tenant lead by UUID
+    @ApiOperation(value="Un Trash Tenant Lead by Id",response = NewLeadTenantDTO.class)
+    @PatchMapping(value = "/untrash/{tenant_lead_id}")
+    public ResponseEntity<NewLeadTenantDTO> untrashTenantLead(@PathVariable("tenant_lead_id")UUID lead_id) {
+        NewLeadTenantDTO newLeadTenant=  this.tenantLeadService.untrashTenantLeadById(lead_id);
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(newLeadTenant);
+    }
+
+
+
     //Get all leads with Pagegable Request
     @RequestMapping(value="/get-leads")
     public Page<LeadTenant> getPagableLeads(@NotNull final Pageable pageable){

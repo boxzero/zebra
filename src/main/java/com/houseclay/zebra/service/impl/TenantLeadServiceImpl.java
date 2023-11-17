@@ -105,6 +105,40 @@ public class TenantLeadServiceImpl implements TenantLeadService {
         return newLeadTenantdto;
     }
 
+    @Override
+    public NewLeadTenantDTO trashTenantLeadById(UUID uuid, NewLeadTenantDTO newLeadTenantDTO) {
+        Optional<LeadTenant> newLeadTenantByID= tenantLeadRepository.findById(uuid);
+        NewLeadTenantDTO newLeadTenantD;
+        try{
+            LeadTenant newLeadTenant = newLeadTenantByID.get();
+            newLeadTenant.getLead().setIsLeadTrashed(true);
+            newLeadTenant.getLead().setTrashedReason(newLeadTenantDTO.getLead().getTrashedReason());
+            LeadTenant newLeadTen = this.tenantLeadRepository.save(newLeadTenant);
+            newLeadTenantD= mapToNewLeadTenantDTO(newLeadTen);
+        }
+        catch (Exception e){
+            throw new NullPointerException("The Property is Not Present");
+        }
+        return newLeadTenantD;
+    }
+
+    @Override
+    public NewLeadTenantDTO untrashTenantLeadById(UUID uuid) {
+        Optional<LeadTenant> newLeadTenantByID= tenantLeadRepository.findById(uuid);
+        NewLeadTenantDTO newLeadTenantDTO;
+        try{
+            LeadTenant newLeadTenant = newLeadTenantByID.get();
+            newLeadTenant.getLead().setIsLeadTrashed(false);
+            newLeadTenant.getLead().setTrashedReason(null);
+            LeadTenant newLeadTen = this.tenantLeadRepository.save(newLeadTenant);
+            newLeadTenantDTO= mapToNewLeadTenantDTO(newLeadTen);
+        }
+        catch (Exception e){
+            throw new NullPointerException("The Property is Not Present");
+        }
+        return newLeadTenantDTO;
+    }
+
     private NewLeadTenantDTO mapToNewLeadTenantDTO(LeadTenant leadTenant)
     {
         return NewLeadTenantDTO.builder()

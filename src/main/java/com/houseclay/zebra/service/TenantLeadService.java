@@ -17,5 +17,8 @@ public interface TenantLeadService {
 
     NewLeadTenantDTO updateTenantLeadById(UUID uuid, NewLeadTenantDTO newLeadTenantDTO);
 
+    NewLeadTenantDTO trashTenantLeadById(UUID uuid, NewLeadTenantDTO newLeadTenantDTO);
+
+    NewLeadTenantDTO untrashTenantLeadById(UUID uuid);
 
 }
