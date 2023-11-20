@@ -2,8 +2,10 @@ package com.houseclay.zebra.controller.leads;
 
 import com.houseclay.zebra.dto.NewLeadTenantDTO;
 import com.houseclay.zebra.model.lead.LeadTenant;
+import com.houseclay.zebra.model.rental.PropertyRent;
 import com.houseclay.zebra.service.impl.TenantLeadServiceImpl;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,9 +35,14 @@ public class TenantLeadController {
 
     }
 
-    @GetMapping(value = "/get-lead/{id}")
     //get a specific details of a lead
-    public ResponseEntity<LeadTenant> getTenantLead(@PathVariable("id")UUID lead_id) {return null;}
+    @ApiOperation(value="Get Tenant Lead by Id",response = NewLeadTenantDTO.class)
+    @GetMapping(value = "/get-lead/{id}")
+    public ResponseEntity<NewLeadTenantDTO> getTenantLead(@PathVariable("id")UUID lead_id) {
+        NewLeadTenantDTO newLeadTenantDTO=  this.tenantLeadService.findTenantLeadById(lead_id);
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(newLeadTenantDTO);
+    }
 
     //Get all leads with Pagegable Request
     @RequestMapping(value="/get-leads")
