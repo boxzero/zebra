@@ -18,6 +18,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
+import java.util.Arrays;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -44,23 +50,38 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     };
 
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/zebra/login");
-        http.csrf().disable(); // disable this token mechanism to use our own token mechanism
+
+         // disable this token mechanism to use our own token mechanism
         http.sessionManagement().sessionCreationPolicy(STATELESS); // session management will be stateless
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
-        http.authorizeRequests().antMatchers("/zebra/login/**").permitAll();
+        //http.authorizeRequests().antMatchers("/zebra/login/**").permitAll();
         http.authorizeRequests().antMatchers(POST,"/users/v1/register-role").hasAnyAuthority("ROLE_SUPER_ADMIN");
         http.authorizeRequests().antMatchers("/users/v1/register-user").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/lead-manager/**").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_MANAGER");
+        http.authorizeRequests().antMatchers("/tenant-leads/**").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/tenant-management/**").hasAnyAuthority("ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/post-property-for-rent/**").hasAnyAuthority("ROLE_MANAGER");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable();
 
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Override
@@ -73,4 +94,5 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
 }

@@ -1,7 +1,9 @@
 package com.houseclay.zebra.service.impl;
 
+import com.houseclay.zebra.dto.UserDTO;
 import com.houseclay.zebra.model.Role;
 import com.houseclay.zebra.model.User;
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.repository.RoleRepository;
 import com.houseclay.zebra.repository.UserRepository;
 import com.houseclay.zebra.service.UserService;
@@ -16,10 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor @Transactional @Slf4j
@@ -57,8 +56,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User registerUser(User user) {
+    public User registerUser(User user, String loggedInUser) {
         log.info("Saving new user {} to the database",user);
+        user.setBaseTimeStamp(BaseTimeStamp.builder().created_by(loggedInUser).created_on(new Date()).build());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -71,13 +71,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Optional<User> findByUserName(String userName) {
         Optional<User> user= Optional.ofNullable(userRepository.findByUsername(userName));
-
         return user;
     }
 
     @Override
-    public Optional<User> findById(String id) {
-        return Optional.empty();
+    public UserDTO findById(UUID id) {
+        return userRepository.findById(id).isPresent()? this.maptoUserDTO(userRepository.findById(id).get()) : null;
+    }
+
+    private UserDTO maptoUserDTO(User user) {
+
+        return UserDTO.builder().
+                username(user.getUsername()).firstName(user.getFirstName()).lastName(user.getLastName())
+                        .contactNumber(user.getContactNumber()).active(user.isActive())
+                        .isEmailVerified(user.isEmailVerified()).isPhoneVerfied(user.isPhoneVerified())
+                        .notes(user.getNotes()).baseTimeStamp(user.getBaseTimeStamp())
+                .build();
     }
 
     @Override

@@ -17,16 +17,16 @@ import java.util.Date;
 @Embeddable
 public class BaseTimeStamp {
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String created_by;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Date created_on;
 
-
+    @Column(nullable = true)
     private String changed_by;
 
-
+    @Column(nullable = true)
     private Date changed_on;
 
 }

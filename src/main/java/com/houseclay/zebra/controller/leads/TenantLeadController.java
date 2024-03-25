@@ -45,7 +45,7 @@ public class TenantLeadController {
     }
 
     //Get all leads with Pagegable Request
-    @RequestMapping(value="/get-leads")
+    @GetMapping(value="/get-leads")
     public Page<LeadTenant> getPagableLeads(@NotNull final Pageable pageable){
         return tenantLeadService.findAllLeads(pageable);
     }

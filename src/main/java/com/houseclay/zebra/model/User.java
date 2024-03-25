@@ -1,5 +1,6 @@
 package com.houseclay.zebra.model;
 
+import com.houseclay.zebra.model.common.BaseTimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -44,4 +46,7 @@ public class User {
     private boolean isPhoneVerified;
 
     private String notes;
+
+    @Embedded
+    private BaseTimeStamp baseTimeStamp;
 }
