@@ -1,12 +1,11 @@
 package com.houseclay.zebra.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.houseclay.zebra.model.common.BaseTimeStamp;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -17,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Table(name = "tbl_users")
+@ToString
 public class User {
 
     @Id
@@ -44,4 +44,7 @@ public class User {
     private boolean isPhoneVerified;
 
     private String notes;
+
+    @Embedded
+    private BaseTimeStamp baseTimeStamp;
 }

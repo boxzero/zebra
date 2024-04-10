@@ -1,6 +1,8 @@
 package com.houseclay.zebra.model.lead;
 
 import com.houseclay.zebra.model.common.BaseTimeStamp;
+import com.houseclay.zebra.model.lead.enums.LeadSource;
+import com.houseclay.zebra.model.lead.enums.LeadType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,21 +10,21 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
-@Entity
+
+/**
+ * Lead Base Class which needs to be embedded by all Leads
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "tbl_leads")
+@Embeddable
 public class Lead {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID lead_id;
 
     private String firstName;
 
@@ -32,19 +34,23 @@ public class Lead {
 
     private String contactNumber;
 
-    private String preferredAreas; // Enter a String with '-' and use split by while processing
+    private Boolean isEmailVerified = false;
+
+    private Boolean isPhoneVerified = false;
 
     private String notes;
 
-    private Date preferredOccupancyDate;
+    private Boolean isLeadConverted = false;
 
-    private Boolean isLeadConverted;
+    @Enumerated(EnumType.STRING)
+    private LeadType leadType;
 
-    private Boolean isLeadTrashed; //Unconverted Leads , Leads to be Blocked
+    private Boolean isLeadTrashed = false; //Unconverted Leads , Leads to be Blocked
 
     private String trashedReason;
 
-    private String leadSource; //Facebook, Online Sites , Reference , Zebra Web App
+    @Enumerated(EnumType.STRING)
+    private LeadSource leadSource; //Facebook, Online Sites , Reference , Zebra Web App
 
     @Embedded
     private BaseTimeStamp baseTimeStamp;
