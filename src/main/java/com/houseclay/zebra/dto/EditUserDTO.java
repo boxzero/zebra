@@ -1,6 +1,6 @@
 package com.houseclay.zebra.dto;
 
-import com.houseclay.zebra.model.Role;
+
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +14,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class UserDTO {
+public class EditUserDTO {
 
     private UUID id;
-
     private String username;
-    private ArrayList<Role> roles=new ArrayList<>();
     private String firstName;
     private String lastName;
     private String contactNumber;
@@ -28,5 +26,5 @@ public class UserDTO {
     private boolean isPhoneVerified;
     private String notes;
     private BaseTimeStamp baseTimeStamp;
-
+    private ArrayList<String> roles = new ArrayList<>();
 }

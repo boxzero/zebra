@@ -1,5 +1,6 @@
 package com.houseclay.zebra.controller.usermanagement;
 
+import com.houseclay.zebra.dto.EditUserDTO;
 import com.houseclay.zebra.dto.UserDTO;
 import com.houseclay.zebra.model.Role;
 import com.houseclay.zebra.model.User;
@@ -10,11 +11,14 @@ import com.houseclay.zebra.utils.JwtTokenUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.QueryParam;
+import java.sql.SQLOutput;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,7 @@ import java.util.UUID;
 @Api(tags = "User Management")
 @RequestMapping(value = "/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -48,6 +53,13 @@ public class UserController {
 
     }
 
+    @ApiOperation(value = "Delete an user",response = String.class)
+    @DeleteMapping("/v1/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") String uuid) {
+        System.out.println("Delete Request for "+uuid);
+        return ResponseEntity.ok().body(userService.deleteUserById(UUID.fromString(uuid)));
+    }
+
     /**
      * Create a new user
      * @param user
@@ -62,9 +74,23 @@ public class UserController {
         return ResponseEntity.ok().body(userService.registerUser(user,username));
     }
 
-    @PostMapping("v1/register-role")
+    @PostMapping("/v1/register-role")
     @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Role> registerRole(@RequestBody Role role) {
         return ResponseEntity.ok().body(userService.saveRole(role));
+    }
+
+
+    /**
+     * Update user
+     */
+    @PutMapping("/v1/update/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable("id") String uuid,
+                                           @RequestBody EditUserDTO user,
+                                           @RequestHeader("Authorization") String token) {
+        JwtTokenUtils jwtTokenUtils = new JwtTokenUtils(applicationConfig);
+        String username = jwtTokenUtils.extractUsernamefromToken(token);
+        System.out.println("Logged in user::::: "+username);
+        return ResponseEntity.ok().body(userService.updateUser(UUID.fromString(uuid),user,username));
     }
 }

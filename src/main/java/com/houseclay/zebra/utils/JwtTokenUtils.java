@@ -13,7 +13,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Component
 public class JwtTokenUtils {
 
-    private final ApplicationConfig appConfig;
+    @Autowired private final ApplicationConfig appConfig;
 
     public JwtTokenUtils(ApplicationConfig appConfig) {
         this.appConfig = appConfig;

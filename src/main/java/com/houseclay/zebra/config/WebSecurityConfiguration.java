@@ -60,7 +60,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(STATELESS); // session management will be stateless
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
         //http.authorizeRequests().antMatchers("/zebra/login/**").permitAll();
-        http.authorizeRequests().antMatchers(POST,"/users/v1/register-role").hasAnyAuthority("ROLE_SUPER_ADMIN");
+        http.authorizeRequests().antMatchers("/users/v1/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
+        http.authorizeRequests().antMatchers("/roles/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
         http.authorizeRequests().antMatchers("/users/v1/register-user").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/lead-manager/**").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/tenant-leads/**").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_MANAGER");

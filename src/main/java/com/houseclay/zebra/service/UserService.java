@@ -1,5 +1,6 @@
 package com.houseclay.zebra.service;
 
+import com.houseclay.zebra.dto.EditUserDTO;
 import com.houseclay.zebra.dto.UserDTO;
 import com.houseclay.zebra.model.Role;
 import com.houseclay.zebra.model.User;
@@ -15,6 +16,9 @@ public interface UserService {
     public List<User> findAll(); //make is pageable - 10 users at once
     public Optional<User> findByUserName(String userName);
     public UserDTO findById(UUID id);
+
+    public String updateUser(UUID id, EditUserDTO editUserDTO, String username);
+    public String deleteUserById(UUID id);
     public void addRoleToUser(String username, String roleName);
     public Role saveRole(Role role);
 }

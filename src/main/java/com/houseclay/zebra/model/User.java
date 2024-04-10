@@ -1,10 +1,7 @@
 package com.houseclay.zebra.model;
 
 import com.houseclay.zebra.model.common.BaseTimeStamp;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -19,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Table(name = "tbl_users")
+@ToString
 public class User {
 
     @Id
