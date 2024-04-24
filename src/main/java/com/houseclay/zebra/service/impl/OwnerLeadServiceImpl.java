@@ -25,6 +25,7 @@ public class OwnerLeadServiceImpl implements OwnerLeadService {
         try {
             //check if same lead exists or not - combination of phone number
             Optional<LeadOwner> leadOwner = ownerLeadRepository.findByContactNumber(ownerLeadDTO.getContactNumber());
+            System.out.println(leadOwner.get());
             if(leadOwner.isPresent()) {
                 return "Lead already exist with same phone number";
             }
@@ -48,7 +49,7 @@ public class OwnerLeadServiceImpl implements OwnerLeadService {
                                 .isPhoneVerified(ownerLeadDTO.getIsPhoneVerified()).isEmailVerified(ownerLeadDTO.getIsEmailVerified())
                                 .trashedReason("").baseTimeStamp(BaseTimeStamp.builder().created_by(username).created_on(new Date()).build()).
                         build()).propertyType(PropertyType.valueOf(ownerLeadDTO.getPropertyType())).bhkType(ownerLeadDTO.getBhkType()).apartmentName(ownerLeadDTO.getApartmentName())
-                        .locality(ownerLeadDTO.getLocality()).googleMapLocationURL(ownerLeadDTO.getGoogleMapLocationUrl()).leadStatus(LeadStatus.valueOf("NEW"))
+                        .locality(ownerLeadDTO.getLocality()).googleMapLocationURL(ownerLeadDTO.getGoogleMapLocationUrl()).leadStatus(LeadStatus.NEW)
                         .preferredTenants(PreferredTenant.valueOf(ownerLeadDTO.getPreferredTenants())).isNonVegAllowed(ownerLeadDTO.getIsNonVegAllowed())
                         .availableFrom(ownerLeadDTO.getAvailableFrom()).expectedRent(Long.valueOf(ownerLeadDTO.getExpectedRent()))
                         .expectedDeposit(Long.valueOf(ownerLeadDTO.getExpectedDeposit())).furnishing(ownerLeadDTO.getFurnishing()).

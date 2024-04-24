@@ -22,6 +22,8 @@ public class OwnerLeadController extends BaseController {
      */
     @PostMapping("/v1/register-owner-lead")
     public ResponseEntity<String> addOwnerLead(@RequestBody OwnerLeadDTO ownerLeadDTO, @RequestHeader("Authorization") String token){
+
+        System.out.println(ownerLeadDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ownerLeadService.addOwnerLead(ownerLeadDTO,findUsernameFromHeader(token)));
