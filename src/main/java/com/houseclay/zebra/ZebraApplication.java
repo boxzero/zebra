@@ -52,29 +52,15 @@ public class ZebraApplication implements CommandLineRunner {
 			userService.saveRole(new Role(null, "ROLE_SUPER_ADMIN", "Primary", BaseTimeStamp.builder().created_by("SYSTEM").created_on(new Date()).build())); // Ankit and Arpit Only
 
 			userService.registerUser(new User(null, "ankit.biswas9@gmail.com", "password", new ArrayList<>(), "Ankit", "Biswas", "7892014327", true, true, true, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "arpit.biswas@gmail.com", "password", new ArrayList<>(), "Arpit", "Biswas", "8910669953", true, true, false, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
 
 
-			/**
-			 Remove this later - Start
-			 */
-			userService.registerUser(new User(null, "ankita.biswas9@gmail.com", "password", new ArrayList<>(), "Ankit", "Biswas", "7892014327", true, true, true, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "arpit.biswasa@gmail.com", "password", new ArrayList<>(), "Arpit", "Biswas", "8910669953", true, true, false, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "ankiti.biswas9@gmail.com", "password", new ArrayList<>(), "Ankit", "Biswas", "7892014327", true, true, true, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "arpit.biswasi@gmail.com", "password", new ArrayList<>(), "Arpit", "Biswas", "8910669953", true, true, false, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "ankithjh.biswas9@gmail.com", "password", new ArrayList<>(), "Ankit", "Biswas", "7892014327", true, true, true, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "arpit.biswasfg@gmail.com", "password", new ArrayList<>(), "Arpit", "Biswas", "8910669953", true, true, false, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "enkit.biswas9@gmail.com", "password", new ArrayList<>(), "Ankit", "Biswas", "7892014327", true, true, true, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			userService.registerUser(new User(null, "arpiq.biswas@gmail.com", "password", new ArrayList<>(), "Arpit", "Biswas", "8910669953", true, true, false, "No Noted mentioned", BaseTimeStamp.builder().build()), "SYSTEM");
-			/**
-			 * Remove this Later - END
-			 */
+
+
 
 			userService.addRoleToUser("ankit.biswas9@gmail.com", "ROLE_SUPER_ADMIN");
-			userService.addRoleToUser("arpit.biswas@gmail.com", "ROLE_MANAGER");
-//		userService.addRoleToUser("john.doe@gmail.com","ROLE_USER");
-			userService.addRoleToUser("ankit.biswas9@gmail.com", "ROLE_MANAGER");
-//		userService.addRoleToUser("ravish.chauvey@gmail.com","ROLE_MANAGER");
+
+
+
 			CommandCustomRunner cmd = CommandCustomRunner.builder().isRunOnce(true).build();
 			commandCustomRunnerRepository.save(cmd);
 		}
