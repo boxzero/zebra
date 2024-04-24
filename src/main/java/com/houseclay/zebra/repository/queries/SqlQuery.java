@@ -7,4 +7,6 @@ public class SqlQuery {
 
     public static final String LISTOFPROPERTYIMAGES="SELECT * FROM IMAGES WHERE image_map=?1";
 
+    public static final String OWNERLEADFINDBYCONTACTNUMBER = "SELECT * FROM LEADS_OWNER WHERE contactNumber=?1";
+
 }

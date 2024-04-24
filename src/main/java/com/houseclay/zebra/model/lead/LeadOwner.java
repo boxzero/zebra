@@ -2,6 +2,7 @@ package com.houseclay.zebra.model.lead;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.houseclay.zebra.model.lead.enums.LeadStatus;
+import com.houseclay.zebra.model.lead.enums.PreferredTenant;
 import com.houseclay.zebra.model.lead.enums.PropertyType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,11 +44,13 @@ public class LeadOwner {
 
     private LeadStatus leadStatus;
 
-    private String preferredTenants; // Bachelors , Family , Open to Both , Company
+    private PreferredTenant preferredTenants; // Bachelors , Family , Open to Both , Company
 
     private boolean isNonVegAllowed;
 
     private Date availableFrom ;
+
+    private String furnishing;
 
     private Long expectedRent;
 
@@ -55,3 +58,4 @@ public class LeadOwner {
 
 
 }
+
