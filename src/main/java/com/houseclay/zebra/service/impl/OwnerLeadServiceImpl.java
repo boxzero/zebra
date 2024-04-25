@@ -25,7 +25,6 @@ public class OwnerLeadServiceImpl implements OwnerLeadService {
         try {
             //check if same lead exists or not - combination of phone number
             Optional<LeadOwner> leadOwner = ownerLeadRepository.findByContactNumber(ownerLeadDTO.getContactNumber());
-            System.out.println(leadOwner.get());
             if(leadOwner.isPresent()) {
                 return "Lead already exist with same phone number";
             }
