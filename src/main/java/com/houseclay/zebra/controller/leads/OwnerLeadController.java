@@ -2,12 +2,15 @@ package com.houseclay.zebra.controller.leads;
 
 import com.houseclay.zebra.controller.BaseController;
 import com.houseclay.zebra.dto.OwnerLeadDTO;
+import com.houseclay.zebra.dto.OwnerLeadListDTO;
 import com.houseclay.zebra.service.impl.OwnerLeadServiceImpl;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value ="/owner-leads")
@@ -29,6 +32,12 @@ public class OwnerLeadController extends BaseController {
                 .body(ownerLeadService.addOwnerLead(ownerLeadDTO,findUsernameFromHeader(token)));
     }
 
+
+    @GetMapping("/v1/fetchAll")
+    public ResponseEntity<List<OwnerLeadListDTO>> fetchAllOwnerLeads() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ownerLeadService.fetchAllOwnerLeads());
+    }
     /**
      * Fetching All Owner Leads
      * @return
