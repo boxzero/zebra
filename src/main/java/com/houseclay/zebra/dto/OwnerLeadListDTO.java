@@ -25,5 +25,7 @@ public class OwnerLeadListDTO {
     private String apartmentName;
     private String expectedRent;
     private String googleMapLocationURL;
+    private String availableFrom;
+    private Boolean clayManage;
 
 }

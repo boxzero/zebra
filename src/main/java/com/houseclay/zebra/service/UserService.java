@@ -21,5 +21,7 @@ public interface UserService {
     public String deleteUserById(UUID id);
     public void addRoleToUser(String username, String roleName);
     public Role saveRole(Role role);
+
+    public String findNameByUsername(String username);
 }
 ;

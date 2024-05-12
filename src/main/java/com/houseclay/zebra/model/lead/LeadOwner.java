@@ -48,6 +48,8 @@ public class LeadOwner {
 
     private boolean isNonVegAllowed;
 
+    private boolean clayManage;
+
     private Date availableFrom ;
 
     private String furnishing;

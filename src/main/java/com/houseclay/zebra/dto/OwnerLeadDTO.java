@@ -37,6 +37,8 @@ public class OwnerLeadDTO {
     private String preferredTenants;
     private Boolean isNonVegAllowed;
     private Boolean isPetAllowed;
+    private Boolean clayManage;
+
 
 
 }

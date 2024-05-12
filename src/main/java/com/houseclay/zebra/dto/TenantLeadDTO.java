@@ -16,10 +16,21 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class NewLeadTenantDTO {
+public class TenantLeadDTO {
 
-    @Embedded
-    private Lead lead;
+
+
+    private String firstName;
+    private String lastName;
+    private String emailId;
+    private String contactNumber;
+    private Boolean isEmailVerified;
+    private Boolean isPhoneVerified;
+    private Boolean isDateFlexible;
+    private Boolean isHavingPets;
+    private Boolean isLookingForARoom;
+    private String leadType;
+    private String leadSource;
 
     private Long minBudget;
     private Long maxBudget;
@@ -34,13 +45,10 @@ public class NewLeadTenantDTO {
 
     private Date occupancyDate;
 
-    private Boolean isDateFlexible;
+
 
     private String tenantType ; // family, bachelors, company
 
     private Boolean isVegetarian ;
 
-    private Boolean isHavingPets ;
-
-    private Boolean isLookingForARoom ;
 }

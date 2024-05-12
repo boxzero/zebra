@@ -12,9 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +44,29 @@ public class OwnerLeadServiceImpl implements OwnerLeadService {
 
     }
 
+    @Override
+    public String deleteById(UUID uuid) {
+        try
+        {
+            ownerLeadRepository.deleteById(uuid);
+            return "Lead Deleted Successfully!";
+        }catch(Exception e){
+            log.error("Exception occured", e);
+            return "Error in Deleting Lead";
+        }
+
+    }
+
+    @Override
+    public Optional<LeadOwner> fetchOwnerLeadById(UUID uuid) {
+        try {
+            return ownerLeadRepository.findById(uuid);
+        } catch (EntityNotFoundException e) {
+            log.error("Failed to fetch lead owner by ID: {}. Entity not found.", uuid, e);
+            return Optional.empty();
+        }
+    }
+
     public List<OwnerLeadListDTO> fetchAllOwnerLeads(){
         List<LeadOwner> listofLeadOwners = ownerLeadRepository.findAll();
         return listofLeadOwners.parallelStream().map(this::sanitizeList).collect(Collectors.toList());
@@ -66,6 +91,8 @@ public class OwnerLeadServiceImpl implements OwnerLeadService {
                 .apartmentName(leadOwner.getApartmentName() != null ? leadOwner.getApartmentName() : "")
                 .expectedRent(leadOwner.getExpectedRent() != null ? leadOwner.getExpectedRent().toString() : "")
                 .googleMapLocationURL(leadOwner.getGoogleMapLocationURL() != null ? leadOwner.getGoogleMapLocationURL() : "")
+                .availableFrom(leadOwner.getAvailableFrom()!=null ? String.valueOf(leadOwner.getAvailableFrom()).split(" ")[0] : "")
+                .clayManage(leadOwner.isClayManage())
                 .build();
 
     }
@@ -76,10 +103,10 @@ public class OwnerLeadServiceImpl implements OwnerLeadService {
                         .emailId(ownerLeadDTO.getEmailId()).leadSource(ownerLeadDTO.getLeadSource().isEmpty() ? null: LeadSource.valueOf(ownerLeadDTO.getLeadSource())).
                         isLeadConverted(false).leadType(LeadType.valueOf(ownerLeadDTO.getLeadType())).isLeadTrashed(false)
                                 .isPhoneVerified(ownerLeadDTO.getIsPhoneVerified()).isEmailVerified(ownerLeadDTO.getIsEmailVerified())
-                                .trashedReason("").baseTimeStamp(BaseTimeStamp.builder().created_by(username).created_on(new Date()).build()).
+                                .trashedReason("").baseTimeStamp(BaseTimeStamp.builder().created_by(username).created_on(new Date()).build()).notes(ownerLeadDTO.getNotes()).
                         build()).propertyType(PropertyType.valueOf(ownerLeadDTO.getPropertyType())).bhkType(ownerLeadDTO.getBhkType()).apartmentName(ownerLeadDTO.getApartmentName())
                         .locality(ownerLeadDTO.getLocality()).googleMapLocationURL(ownerLeadDTO.getGoogleMapLocationUrl()).leadStatus(LeadStatus.NEW)
-                        .preferredTenants(PreferredTenant.valueOf(ownerLeadDTO.getPreferredTenants())).isNonVegAllowed(ownerLeadDTO.getIsNonVegAllowed())
+                        .preferredTenants(PreferredTenant.valueOf(ownerLeadDTO.getPreferredTenants())).isNonVegAllowed(ownerLeadDTO.getIsNonVegAllowed()).clayManage(ownerLeadDTO.getClayManage())
                         .availableFrom(ownerLeadDTO.getAvailableFrom()).expectedRent(ownerLeadDTO.getExpectedRent().isEmpty()? null: Long.valueOf(ownerLeadDTO.getExpectedRent()))
                         .expectedDeposit(ownerLeadDTO.getExpectedDeposit().isEmpty()? null : Long.valueOf(ownerLeadDTO.getExpectedDeposit())).furnishing(ownerLeadDTO.getFurnishing()).
                         build();

@@ -1,5 +1,6 @@
 package com.houseclay.zebra.controller.usermanagement;
 
+import com.houseclay.zebra.controller.BaseController;
 import com.houseclay.zebra.dto.EditUserDTO;
 import com.houseclay.zebra.dto.UserDTO;
 import com.houseclay.zebra.model.Role;
@@ -29,7 +30,7 @@ import java.util.UUID;
 @RequestMapping(value = "/users")
 @RequiredArgsConstructor
 @Slf4j
-public class UserController {
+public class UserController extends BaseController {
 
     private final UserService userService;
 
@@ -41,6 +42,12 @@ public class UserController {
         return ResponseEntity.ok().body(userService.findAll());
     }
 
+    @GetMapping("/v1/getloggedinuser")
+    public ResponseEntity<String> loggedInUserName(@RequestHeader("Authorization") String token) {
+
+        return ResponseEntity.ok()
+                .body(userService.findNameByUsername(findUsernameFromHeader(token)));
+    }
 
     @ApiOperation(value="Fetch an user by id",response = UserDTO.class)
     @GetMapping("/v1/{id}")

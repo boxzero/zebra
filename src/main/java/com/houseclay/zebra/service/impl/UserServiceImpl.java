@@ -156,5 +156,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return roleRepository.save(role);
     }
 
+    @Override
+    public String findNameByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user!=null){
+            return user.getFirstName() + " " + user.getLastName();
+        }
+
+        return "User Not Found";
+    }
+
 
 }

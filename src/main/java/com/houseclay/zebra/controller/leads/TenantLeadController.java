@@ -1,6 +1,7 @@
 package com.houseclay.zebra.controller.leads;
 
-import com.houseclay.zebra.dto.NewLeadTenantDTO;
+
+import com.houseclay.zebra.dto.TenantLeadDTO;
 import com.houseclay.zebra.model.lead.LeadTenant;
 import com.houseclay.zebra.model.rental.PropertyRent;
 import com.houseclay.zebra.service.impl.TenantLeadServiceImpl;
@@ -26,8 +27,8 @@ public class TenantLeadController {
     @Autowired
     TenantLeadServiceImpl tenantLeadService;
     //add a new tenant lead
-    @PostMapping(value = "/add-lead")
-    public ResponseEntity<LeadTenant> addTenantLead(@RequestBody NewLeadTenantDTO newLeadTenantDTO){
+    @PostMapping(value = "/v1/register-tenant-lead")
+    public ResponseEntity<LeadTenant> addTenantLead(@RequestBody TenantLeadDTO newLeadTenantDTO, @RequestHeader("Autorization") String token){
         //User user = (User) authentication.getPrincipal();
         //leadTenant.getLead().getBaseTimeStamp().setCreated_by(user.getUsername());
         return ResponseEntity.status(HttpStatus.OK)
@@ -35,14 +36,14 @@ public class TenantLeadController {
 
     }
 
-    //get a specific details of a lead
-    @ApiOperation(value="Get Tenant Lead by Id",response = NewLeadTenantDTO.class)
-    @GetMapping(value = "/get-lead/{id}")
-    public ResponseEntity<NewLeadTenantDTO> getTenantLead(@PathVariable("id")UUID lead_id) {
-        NewLeadTenantDTO newLeadTenantDTO=  this.tenantLeadService.findTenantLeadById(lead_id);
-        return  ResponseEntity.status(HttpStatus.OK)
-                .body(newLeadTenantDTO);
-    }
+//    //get a specific details of a lead
+//    @ApiOperation(value="Get Tenant Lead by Id",response = NewLeadTenantDTO.class)
+//    @GetMapping(value = "/get-lead/{id}")
+//    public ResponseEntity<NewLeadTenantDTO> getTenantLead(@PathVariable("id")UUID lead_id) {
+//        NewLeadTenantDTO newLeadTenantDTO=  this.tenantLeadService.findTenantLeadById(lead_id);
+//        return  ResponseEntity.status(HttpStatus.OK)
+//                .body(newLeadTenantDTO);
+//    }
 
     //Get all leads with Pagegable Request
     @GetMapping(value="/get-leads")
