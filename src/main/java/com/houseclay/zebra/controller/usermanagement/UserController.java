@@ -3,6 +3,7 @@ package com.houseclay.zebra.controller.usermanagement;
 import com.houseclay.zebra.controller.BaseController;
 import com.houseclay.zebra.dto.EditUserDTO;
 import com.houseclay.zebra.dto.UserDTO;
+import com.houseclay.zebra.dto.UserListDTO;
 import com.houseclay.zebra.model.Role;
 import com.houseclay.zebra.model.User;
 import com.houseclay.zebra.service.UserService;
@@ -20,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.QueryParam;
 import java.sql.SQLOutput;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @Api(tags = "User Management")
@@ -99,5 +97,11 @@ public class UserController extends BaseController {
         String username = jwtTokenUtils.extractUsernamefromToken(token);
         System.out.println("Logged in user::::: "+username);
         return ResponseEntity.ok().body(userService.updateUser(UUID.fromString(uuid),user,username));
+    }
+
+
+    @GetMapping("/v1/userlist")
+    public ResponseEntity<ArrayList<UserListDTO>> getUsersList() {
+        return ResponseEntity.ok().body(userService.fetchAllUsersList());
     }
 }

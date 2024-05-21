@@ -2,9 +2,11 @@ package com.houseclay.zebra.service;
 
 import com.houseclay.zebra.dto.EditUserDTO;
 import com.houseclay.zebra.dto.UserDTO;
+import com.houseclay.zebra.dto.UserListDTO;
 import com.houseclay.zebra.model.Role;
 import com.houseclay.zebra.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,5 +25,7 @@ public interface UserService {
     public Role saveRole(Role role);
 
     public String findNameByUsername(String username);
+
+    public ArrayList<UserListDTO> fetchAllUsersList();
 }
 ;

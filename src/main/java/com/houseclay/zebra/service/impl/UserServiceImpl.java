@@ -2,6 +2,7 @@ package com.houseclay.zebra.service.impl;
 
 import com.houseclay.zebra.dto.EditUserDTO;
 import com.houseclay.zebra.dto.UserDTO;
+import com.houseclay.zebra.dto.UserListDTO;
 import com.houseclay.zebra.model.Role;
 import com.houseclay.zebra.model.User;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor @Transactional @Slf4j
@@ -164,6 +166,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         return "User Not Found";
+    }
+
+    @Override
+    public ArrayList<UserListDTO> fetchAllUsersList() {
+        return (ArrayList<UserListDTO>) userRepository.findAll().parallelStream().map(this::sanitizeToList).collect(Collectors.toList());
+    }
+
+    private UserListDTO sanitizeToList(User user) {
+        return UserListDTO.builder().user_id(String.valueOf(user.getId()))
+                .username(user.getUsername()).name(user.getFirstName()+ " "+ user.getLastName())
+                .build();
     }
 
 
