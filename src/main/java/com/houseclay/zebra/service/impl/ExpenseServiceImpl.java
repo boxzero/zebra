@@ -50,22 +50,22 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public String approveExpense(UUID uuid) {
+    public String approveExpense(UUID uuid,String loggedInUser) {
         return null;
     }
 
     @Override
-    public String disapproveExpense(UUID uuid) {
+    public String reimburseExpense(UUID uuid,String loggedInUser) {
         return null;
     }
 
     @Override
-    public String editExpense(ExpenseDTO expenseDTO) {
+    public String editExpense(ExpenseDTO expenseDTO,String loggedInUser) {
         return null;
     }
 
     @Override
-    public void deleteExpense(UUID uuid) {
+    public void deleteExpense(UUID uuid,String loggedInUser) {
 
     }
 }

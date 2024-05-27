@@ -37,9 +37,11 @@ public class Expense {
 
     @Embedded private BaseTimeStamp baseTimeStamp;
 
-    private boolean approved;
+    private boolean approved = false;
 
     private boolean approvedBy;
+
+    private boolean isReimbursed = false;
 
 
 
