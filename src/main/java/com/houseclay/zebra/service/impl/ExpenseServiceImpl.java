@@ -5,13 +5,17 @@ import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.model.expense.Expense;
 import com.houseclay.zebra.repository.ExpenseRepository;
 import com.houseclay.zebra.service.ExpenseService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
@@ -31,6 +35,18 @@ public class ExpenseServiceImpl implements ExpenseService {
             return "Error in Saving Data";
         }
 
+    }
+
+    @Override
+    public List<Expense> fetchAll(String loggedInUser) {
+        ArrayList<Expense> expenseArrayList = new ArrayList<>();
+        try{
+            expenseArrayList = (ArrayList<Expense>) expenseRepository.findAll();
+        }catch (Exception ex) {
+            log.error("Error in fetchAll Expense Service Impl ");
+        }
+
+        return expenseArrayList;
     }
 
     @Override
