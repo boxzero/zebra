@@ -28,6 +28,7 @@ public class ExpenseController extends BaseController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Expense>> fetchExpenses(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.status(HttpStatus.OK).body(expenseService.fetchAll(findUsernameFromHeader(token)));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(expenseService.fetchAll(findUsernameFromHeader(token)));
     }
 }
