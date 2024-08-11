@@ -1,6 +1,7 @@
 package com.houseclay.zebra.model.common;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
+@Builder
 public class PropertySpecs {
 
 
@@ -64,5 +66,15 @@ public class PropertySpecs {
     private String longitude;
 
     private String locationurl;
+
+//    -----------------------------------------------------------------
+    @Column(nullable = false)
+    private String bhkType;
+
+    @Column(nullable = false)
+    private int totalFloors;
+
+    @Column(nullable = false)
+    private int floor;
 
 }

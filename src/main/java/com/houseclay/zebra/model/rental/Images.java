@@ -42,5 +42,11 @@ public class Images {
 
     @Embedded
     private BaseTimeStamp baseTimeStamp;
+
+
+
+    private String imageNameInCloud;
+    // folder url
+
 }
 

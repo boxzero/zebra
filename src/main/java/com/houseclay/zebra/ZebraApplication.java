@@ -61,6 +61,7 @@ public class ZebraApplication implements CommandLineRunner {
 
 
 
+
 			CommandCustomRunner cmd = CommandCustomRunner.builder().isRunOnce(true).build();
 			commandCustomRunnerRepository.save(cmd);
 		}
