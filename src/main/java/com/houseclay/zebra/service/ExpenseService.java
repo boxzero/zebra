@@ -13,6 +13,7 @@ public interface ExpenseService {
     public List<Expense> fetchAll(String loggedInUser);
     public String approveExpense(UUID uuid,String loggedInUser);
     public String reimburseExpense(UUID uuid,String loggedInUser);
-    public String editExpense(ExpenseDTO expenseDTO,String loggedInUser);
+    public String editExpense(ExpenseDTO expenseDTO,String loggedInUser, UUID expenseId);
+    public Expense viewExpense(UUID expenseId);
     public void deleteExpense(UUID uuid,String loggedInUser);
 }

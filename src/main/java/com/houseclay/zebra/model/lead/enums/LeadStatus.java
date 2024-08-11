@@ -2,13 +2,13 @@ package com.houseclay.zebra.model.lead.enums;
 
 public enum LeadStatus {
     NEW("NEW"),
-    IN_PROGRESS("INPROGRESS"),
-    VISIT_SCHEDULED("VISITSCHEDULED"), // for property owners,sellers
-    APPOINTMENT_SCHEDULED("APPOINTMENTSCHEDULED"), //for buyers, tenants
-    DISCARDED("DISCARDED"), // lead not converted, dump leads
-    CONVERTED("CONVERTED"), // tenant, buyers converted
-    ONBOARDED("ONBOARDED"); // owners, sellers property onbaorded
-
+    CALL_BACK_LATER("CALL_BACK_LATER"),
+    VISIT_SCHEDULED("VISIT_SCHEDULED"), // for property owners,sellers
+    CUSTOMER_AGREED("CUSTOMER_AGREED"), //for buyers, tenants
+    REJECTED("REJECTED"), // lead not converted, dump leads
+    INVALID_LEAD("INVALID_LEAD"), // tenant, buyers converted
+    ONBOARDED("ONBOARDED"), // owners, sellers property onbaorded
+    OTHERS("OTHERS");
     public final String label;
 
     private LeadStatus(String label) {

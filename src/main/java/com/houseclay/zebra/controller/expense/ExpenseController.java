@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/expense")
@@ -30,5 +31,18 @@ public class ExpenseController extends BaseController {
     public ResponseEntity<List<Expense>> fetchExpenses(@RequestHeader("Authorization") String token) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(expenseService.fetchAll(findUsernameFromHeader(token)));
+    }
+
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<String> editExpense(@RequestHeader("Authorization") String token, @RequestBody ExpenseDTO expenseDTO,@PathVariable("id") String uuid) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(expenseService.editExpense(expenseDTO,findUsernameFromHeader(token), UUID.fromString(uuid)));
+    }
+
+    @GetMapping("/view/{id}")
+    public ResponseEntity<Expense> viewExpense(@RequestHeader("Authorization") String token,@PathVariable("id") String uuid) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(expenseService.viewExpense(UUID.fromString(uuid)));
     }
 }

@@ -29,8 +29,7 @@ public class TenantLeadController {
     //add a new tenant lead
     @PostMapping(value = "/v1/register-tenant-lead")
     public ResponseEntity<LeadTenant> addTenantLead(@RequestBody TenantLeadDTO newLeadTenantDTO, @RequestHeader("Autorization") String token){
-        //User user = (User) authentication.getPrincipal();
-        //leadTenant.getLead().getBaseTimeStamp().setCreated_by(user.getUsername());
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(tenantLeadService.addTenantLead(newLeadTenantDTO));
 

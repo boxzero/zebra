@@ -1,5 +1,6 @@
 package com.houseclay.zebra.service.impl;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.houseclay.zebra.dto.ExpenseDTO;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.model.expense.Expense;
@@ -9,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -60,8 +58,46 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public String editExpense(ExpenseDTO expenseDTO,String loggedInUser) {
-        return null;
+    public String editExpense(ExpenseDTO expenseDTO,String loggedInUser, UUID expenseId) {
+        try{
+            Optional<Expense> expense = expenseRepository.findById(expenseId);
+            if(expense.isPresent()){
+                //update the record
+                BaseTimeStamp baseTimeStamp = BaseTimeStamp.builder().
+                        created_by(expense.get().getBaseTimeStamp().getCreated_by())
+                        .created_on(expense.get().getBaseTimeStamp().getCreated_on())
+                        .changed_on(new Date())
+                        .changed_by(loggedInUser).build();
+
+                Expense updatedExpense = Expense.builder()
+                        .baseTimeStamp(baseTimeStamp)
+                        .expenseMadeBy(expenseDTO.getExpenseMadeBy())
+                        .expenseType(expenseDTO.getExpenseType()).
+                        date(expenseDTO.getDate())
+                        .amount(expenseDTO.getAmount())
+                        .notes(expenseDTO.getNotes()).build();
+
+                expenseRepository.save(updatedExpense);
+                return "Expense updated successfully!";
+            }
+        }catch (Exception e) {
+
+        }
+        return "Expense cannot be updated: Record missing/Data Issue";
+    }
+
+    @Override
+    public Expense viewExpense(UUID expenseId) {
+        Expense expenseDetails = new Expense();
+        try{
+            Optional<Expense> expense = expenseRepository.findById(expenseId);
+            if(expense.isPresent()){
+                expenseDetails = expense.get();
+            }
+        }catch(Exception e) {
+            log.error("Exeption in viewExpense Implementation method");
+        }
+        return expenseDetails;
     }
 
     @Override
