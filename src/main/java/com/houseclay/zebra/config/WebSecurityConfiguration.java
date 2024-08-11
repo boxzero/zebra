@@ -46,7 +46,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             "/v2/api-docs",
             "/webjars/**",
-            "/zebra/login/**"
+            "/zebra/login/**",
+            //-----------------------------
+//            "/v3/api-docs/**"
     };
 
 
@@ -59,7 +61,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
          // disable this token mechanism to use our own token mechanism
         http.sessionManagement().sessionCreationPolicy(STATELESS); // session management will be stateless
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
-        //http.authorizeRequests().antMatchers("/zebra/login/**").permitAll();
+//        http.authorizeRequests().antMatchers("/zebra/login/**").permitAll();
         http.authorizeRequests().antMatchers("/users/v1/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
         http.authorizeRequests().antMatchers("/roles/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
         http.authorizeRequests().antMatchers("/users/v1/register-user").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_MANAGER");
@@ -85,6 +87,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

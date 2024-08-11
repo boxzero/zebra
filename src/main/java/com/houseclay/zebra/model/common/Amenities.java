@@ -1,9 +1,6 @@
 package com.houseclay.zebra.model.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@ToString
 @Builder(toBuilder = true)
 public class Amenities {
 
@@ -37,6 +35,12 @@ public class Amenities {
     private boolean housekeeping;
     private boolean power_backup;
 
+//  added  -------------------------------
+    private boolean internet_services;
+    private boolean servant_room;
+    private boolean visitor_parking;
+    private boolean gas_pilpeline;
+    private boolean shopping_centre;
 
 
 }

@@ -13,6 +13,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder(toBuilder = true)
 @Table(name="address")
 @JsonIgnoreProperties(ignoreUnknown = true)

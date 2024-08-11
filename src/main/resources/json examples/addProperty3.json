@@ -1,0 +1,78 @@
+{
+  "propertyDetails": {
+    "name": "Testing apartments",
+    "title": "2Bhk in Abc apartments",
+    "type": "apartment" ,
+    "bhkType": "2BHK",
+    "floor": 2,
+    "totalFloor": 5,
+    "propertyAge": "3 years",
+    "facing": "east",
+    "builtupArea":23.6
+
+  },
+  "localityDetails": {
+    "city": "Banglore",
+    "locality": "Near abc statue",
+    "Landmark": "street"
+  },
+  "ownerDetails": {
+    "firstName":"Farhan",
+    "lastName": "Ali",
+    "contactNumber": "8989898989",
+    "Email": "abc@gmail.com",
+    "Notes": "this is owner details"
+  },
+  "rentalDetails": {
+    "propertyAvailable": "rent",
+    "ExpectedRent": 15000.0,
+    "ExpectedDeposit": 50000.0,
+    "monthlyMaintenence": 2000.0,
+    "AvailableFrom": "2024-07-20T00:00:00.000Z",
+    "furniture": "1",
+    "parking": "2",
+    "Description": "A fully furnished apartment available for rent.",
+    "preferredTenanats": "Family",
+    "expectedMaintenance": 2000.0
+  },
+  "amenities": {
+    "Bathroom": 2,
+    "Balcony": 3,
+    "WaterSupply": "corporation",
+    "Gym": "yes",
+    "NonVegAllowed": "no",
+    "GatedSecurity": "yes",
+    "showProperty": "i will show",
+    "Description": "A well-maintained apartment with modern amenities.",
+    "contactNumber": "1234567890",
+    "activeStatus": false,
+    "inactive_reason": "processing stage",
+    "isManaged": true,
+
+    "amenities": {
+      "lift": true,
+      "intercom": true,
+      "childrenPlayArea": false,
+      "servantRoom": false,
+      "gasPipeline": true,
+      "security": true,
+      "rainwaterHarvesting": true,
+      "housekeeping": false,
+      "visitorParking": true,
+      "internetServices": true,
+      "clubHouse": true,
+      "swimmingPool": true,
+      "fireSafety": true,
+      "shoppingCentre": false,
+      "park": true,
+      "sewageTreatmentPlant": true,
+      "powerBackup": true
+    }
+  },
+  "schedule": {
+    "Availability": "weekDay",
+    "StartTime": "08:00 AM",
+    "EndTime": "05:00 PM"
+  }
+
+}
