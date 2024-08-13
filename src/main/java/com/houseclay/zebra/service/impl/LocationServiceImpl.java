@@ -1,14 +1,17 @@
 package com.houseclay.zebra.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.houseclay.zebra.dto.LocationDTO;
 import com.houseclay.zebra.model.Configure.Location;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.repository.LocationRepository;
 import com.houseclay.zebra.service.LocationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileNotFoundException;
 import java.util.Date;
@@ -17,6 +20,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
+@Slf4j
 public class LocationServiceImpl implements LocationService {
 
 
@@ -24,12 +29,25 @@ public class LocationServiceImpl implements LocationService {
     private LocationRepository locationRepository;
 
     @Override
-    public ResponseEntity<Location> addLocation(String jsonProperty) {
-        Location location=convertJsonToLocation(jsonProperty);
-        BaseTimeStamp baseTimeStamp=BaseTimeStamp.builder().created_by("SYSTEM").created_on(new Date()).changed_on(null).changed_by(null).build();
-        location.setBaseTimeStamp(baseTimeStamp);
-        return  ResponseEntity.status(HttpStatus.OK).body(locationRepository.save(location));
+    public Location addLocation(LocationDTO locationDTO, String loggedInUser) {
+        try {
+            Location location = Location.builder()
+                    .city(locationDTO.getCity())
+                    .locationName(locationDTO.getLocationName())
+                    .pinCode(locationDTO.getPincode())
+                    .baseTimeStamp(BaseTimeStamp.builder()
+                            .created_by(loggedInUser)
+                            .created_on(new Date())
+                            .build())
+                    .build();
 
+            location = locationRepository.save(location);
+            log.info("Location saved successfully");
+            return location;
+        } catch (Exception ex) {
+            log.error("Unable to save location", ex);
+            throw new RuntimeException("Unable to save location", ex); // rethrow the exception
+        }
     }
 
     @Override
@@ -48,8 +66,8 @@ public class LocationServiceImpl implements LocationService {
 
             Location newLocation = convertJsonToLocation(jsonProperty);
 
-            existingLocation.setName(newLocation.getName());
-            existingLocation.setPincode(newLocation.getPincode());
+            existingLocation.setLocationName(newLocation.getLocationName());
+            existingLocation.setPinCode(newLocation.getPinCode());
             existingLocation.setCity(newLocation.getCity());
             existingLocation.setBaseTimeStamp(baseTimeStamp);
 

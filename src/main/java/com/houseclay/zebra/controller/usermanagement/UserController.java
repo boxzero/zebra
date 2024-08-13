@@ -73,10 +73,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "Register a new user for zebra",response = User.class)
     @PostMapping("/v1/register-user")
     public ResponseEntity<User> registerUser(@RequestBody User user, @RequestHeader("Authorization") String token) {
-        JwtTokenUtils jwtTokenUtils = new JwtTokenUtils(applicationConfig);
-        String username = jwtTokenUtils.extractUsernamefromToken(token);
-        System.out.println("Logged in user::::: "+username);
-        return ResponseEntity.ok().body(userService.registerUser(user,username));
+        return ResponseEntity.ok().body(userService.registerUser(user,findUsernameFromHeader(token)));
     }
 
     @PostMapping("/v1/register-role")

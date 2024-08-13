@@ -23,8 +23,8 @@ public class Location {
         @GeneratedValue(generator = "UUID")
         @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
         private UUID locationId;
-        private String name;
-        private String pincode;
+        private String locationName;
+        private String pinCode;
         private String city;
         @Embedded
         private BaseTimeStamp baseTimeStamp;

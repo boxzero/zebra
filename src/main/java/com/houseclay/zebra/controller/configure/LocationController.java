@@ -1,6 +1,8 @@
 package com.houseclay.zebra.controller.configure;
 
 
+import com.houseclay.zebra.controller.BaseController;
+import com.houseclay.zebra.dto.LocationDTO;
 import com.houseclay.zebra.model.Configure.Location;
 import com.houseclay.zebra.service.LocationService;
 import io.swagger.annotations.Api;
@@ -16,14 +18,19 @@ import java.util.UUID;
 @Api(tags = "Location")
 @RequestMapping(value="/configure")
 @Controller
-public class LocationController {
+public class LocationController extends BaseController {
 
     @Autowired
     private LocationService locationService;
 
-    @PostMapping("/add-Location")
-    public ResponseEntity<Location> addLocation(@RequestBody String jsonProperty){
-        return locationService.addLocation(jsonProperty);
+    @PostMapping("/add-location")
+    public ResponseEntity<Location> addLocation(@RequestBody LocationDTO locationDTO, @RequestHeader("Authorization") String token){
+        Location location = locationService.addLocation(locationDTO, findUsernameFromHeader(token));
+        if (location != null) {
+            return ResponseEntity.ok(location);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/edit-location/{locationId}")
