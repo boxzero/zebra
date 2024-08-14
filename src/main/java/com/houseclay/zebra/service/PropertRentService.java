@@ -3,6 +3,7 @@ package com.houseclay.zebra.service;
 import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.dto.SaveAndUrlResponseDTO;
 import com.houseclay.zebra.dto.ViewAllPropertiesDTO;
+import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.rental.PropertyRent;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,9 +25,9 @@ public interface PropertRentService {
     PropertyRent updatePropertyForRentById(UUID uuid);
 
 
-    String saveProperty(String jsonProperty, List<MultipartFile> images);
+    String saveProperty(String jsonProperty, List<MultipartFile> images, String username);
 
-    PropertyRent updatePropertyMultipartData(UUID propertyId, PropertyRent newProperty, List<MultipartFile> images) throws FileNotFoundException;
+    PropertyRent updatePropertyMultipartData(UUID propertyId, PropertyRent newProperty, List<MultipartFile> images, String username) throws IdNotFoundException;
 
 
     List<ViewAllPropertiesDTO>viewAllDetails();

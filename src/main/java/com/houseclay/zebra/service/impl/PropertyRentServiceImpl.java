@@ -9,6 +9,7 @@ import com.houseclay.zebra.CloudOperations.CloudOperations;
 import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.dto.SaveAndUrlResponseDTO;
 import com.houseclay.zebra.dto.ViewAllPropertiesDTO;
+import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.common.Address;
 import com.houseclay.zebra.model.common.Amenities;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
@@ -248,10 +249,10 @@ public class PropertyRentServiceImpl implements PropertRentService {
 
 
 
-    public PropertyRent viewSpecificProperty(UUID propertyId) throws FileNotFoundException {
+    public PropertyRent viewSpecificProperty(UUID propertyId) throws IdNotFoundException {
         Optional<PropertyRent> propertyRent = propertyForRentRepository.findById(propertyId);
             if (!propertyRent.isPresent()) {
-                throw new FileNotFoundException("The file not found !!");
+                throw new IdNotFoundException(propertyId, "PropetyRent Id not found !!");
             }
         return propertyRent.get();
     }
@@ -262,14 +263,14 @@ public class PropertyRentServiceImpl implements PropertRentService {
 
 
 
-    public List<Images> convertMulipartToListOfImages(List<MultipartFile> images){
+    public List<Images> convertMulipartToListOfImages(List<MultipartFile> images, String loggedInUser){
         List<Images> list_of_Images = new ArrayList<Images>();
         for (MultipartFile f : images) {
             Images image = null;
             try {
                 image = Images.builder().
                         name(StringUtils.cleanPath(f.getOriginalFilename())).
-                        contentType(f.getContentType()).baseTimeStamp(BaseTimeStamp.builder().created_by("SYSTEM").created_on(new Date()).build())
+                        contentType(f.getContentType()).baseTimeStamp(BaseTimeStamp.builder().created_by(loggedInUser).created_on(new Date()).build())
                         .size(f.getSize()).image_data(f.getBytes()).build();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -283,11 +284,11 @@ return list_of_Images;
 
 
     @Override
-    public String saveProperty(String jsonProperty, List<MultipartFile> images) {
+    public String saveProperty(String jsonProperty, List<MultipartFile> images, String loggedInUser) {
         PropertyRent propertyRent=convertStringToObject(jsonProperty);
-        BaseTimeStamp baseTimeStamp = BaseTimeStamp.builder().created_by("SYSTEM").created_on(new Date()).build();
+        BaseTimeStamp baseTimeStamp = BaseTimeStamp.builder().created_by(loggedInUser).created_on(new Date()).build();
         propertyRent.setBaseTimeStamp(baseTimeStamp);
-            List<Images>list_of_Images=convertMulipartToListOfImages(images);
+            List<Images>list_of_Images=convertMulipartToListOfImages(images, loggedInUser);
             propertyRent.setImageMap(list_of_Images);
 
             String folderName=propertyRent.getName()+"___"+UUID.randomUUID();
@@ -311,16 +312,16 @@ return list_of_Images;
 
 
     @Override
-    public PropertyRent updatePropertyMultipartData(UUID propertyId, PropertyRent newProperty, List<MultipartFile> images) throws FileNotFoundException {
+    public PropertyRent updatePropertyMultipartData(UUID propertyId, PropertyRent newProperty, List<MultipartFile> images, String loggedInUser) throws IdNotFoundException {
         Optional<PropertyRent>propertyRent=propertyForRentRepository.findById(propertyId);
         if(!propertyRent.isPresent()){
-            throw new FileNotFoundException("File Not Found");
+            throw new IdNotFoundException(propertyId, "propertyRent Id Not Found");
         }
 
         PropertyRent existingProperty=propertyRent.get();
 
 
-        List<Images>newImages=convertMulipartToListOfImages(images);
+        List<Images>newImages=convertMulipartToListOfImages(images, loggedInUser);
         List<Images>oldImages=existingProperty.getImageMap();
 
 
@@ -330,11 +331,12 @@ return list_of_Images;
         cloudOperations.uploadImagesToFolder(newImages, existingProperty.getFolderName());
 
 
-        BaseTimeStamp baseTimeStamp=newProperty.getBaseTimeStamp();
-        baseTimeStamp.setChanged_by("SYSTEM");
-        baseTimeStamp.setChanged_on(new Date());
+//        BaseTimeStamp baseTimeStamp=newProperty.getBaseTimeStamp();
+//        baseTimeStamp.setChanged_by(loggedInUser);
+//        baseTimeStamp.setChanged_on(new Date());
         existingProperty.getBaseTimeStamp().setChanged_on(new Date());
-        existingProperty.getBaseTimeStamp().setChanged_by("SYSTEM");
+        existingProperty.getBaseTimeStamp().setChanged_by(loggedInUser); //---token
+
         existingProperty.setName(newProperty.getName());
         existingProperty.setTitle(newProperty.getTitle());
         existingProperty.setOwner(newProperty.getOwner());
@@ -346,7 +348,7 @@ return list_of_Images;
         existingProperty.setPreferred_tenant_type(newProperty.getPreferred_tenant_type());
 
         existingProperty.setActive_status(false); // ------------------
-        existingProperty.setBaseTimeStamp(baseTimeStamp);
+//        existingProperty.setBaseTimeStamp(baseTimeStamp);
 
         return propertyForRentRepository.save(existingProperty);
     }

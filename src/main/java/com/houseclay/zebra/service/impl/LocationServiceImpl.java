@@ -2,6 +2,7 @@ package com.houseclay.zebra.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.houseclay.zebra.dto.LocationDTO;
+import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.Configure.Location;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.repository.LocationRepository;
@@ -51,41 +52,58 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public ResponseEntity<Location> editLocation(UUID locationId, String jsonProperty) throws FileNotFoundException {
+    public Location editLocation(UUID locationId, LocationDTO locationDTO, String loggedInUser) throws IdNotFoundException {
         Optional<Location> location = locationRepository.findById(locationId);
         if(!location.isPresent()){
-            throw new FileNotFoundException("File Not Found !");
+            throw new IdNotFoundException(locationId, "Location Id Not Found !");
         }
 
+        try{
             Location existingLocation = location.get();
 
-
-            BaseTimeStamp baseTimeStamp=existingLocation.getBaseTimeStamp();
+            BaseTimeStamp baseTimeStamp = existingLocation.getBaseTimeStamp();
             baseTimeStamp.setChanged_on(new Date());
-            baseTimeStamp.setChanged_by("SYSTEM");
+            baseTimeStamp.setChanged_by(loggedInUser);
 
-            Location newLocation = convertJsonToLocation(jsonProperty);
 
-            existingLocation.setLocationName(newLocation.getLocationName());
-            existingLocation.setPinCode(newLocation.getPinCode());
-            existingLocation.setCity(newLocation.getCity());
+            existingLocation.setLocationName(locationDTO.getLocationName());
+            existingLocation.setPinCode(locationDTO.getPincode());
+            existingLocation.setCity(locationDTO.getCity());
             existingLocation.setBaseTimeStamp(baseTimeStamp);
 
-            locationRepository.save(existingLocation);
-            return ResponseEntity.status(HttpStatus.OK).body(existingLocation);
+            existingLocation=locationRepository.save(existingLocation);
+            log.info("Location updated successfully !");
+            return existingLocation;
+        }catch(Exception ex){
+            log.error("Unable to edit location", ex);
+            throw new RuntimeException("Unable to edit location" ,ex);
+        }
 
 
 
     }
 
     @Override
-    public ResponseEntity<String> deleteLocation(UUID locationId) throws FileNotFoundException{
+    public boolean deleteLocation(UUID locationId, List<String> roles) throws IdNotFoundException{
         Optional<Location> location = locationRepository.findById(locationId);
         if(!location.isPresent()){
-            throw new FileNotFoundException("file not found !");
+            throw new IdNotFoundException(locationId, "location Id  not found !");
         }
-        locationRepository.deleteById(locationId);
-        return ResponseEntity.status(HttpStatus.OK).body("deleted !");
+        boolean authorizedUserToDelete=true;
+        System.out.println(roles+"-------------------------");
+        try {
+            if (roles.contains("ROLE_SUPER_ADMIN")) {
+                locationRepository.deleteById(locationId);
+                log.info("Location deleted Successfully !");
+            } else {
+                authorizedUserToDelete = false;
+            }
+        }catch(Exception ex){
+            log.error("Unable to Delete location", ex);
+            throw new RuntimeException("Unable to Delete location", ex);
+        }
+
+        return authorizedUserToDelete;
 
     }
 
@@ -93,6 +111,16 @@ public class LocationServiceImpl implements LocationService {
     public ResponseEntity<List<Location>> viewAllLocations() {
         List<Location> allLocations=locationRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(allLocations);
+    }
+
+    @Override
+    public boolean checkForExistingLocation(LocationDTO locationDTO) {
+
+        Optional<Location> location=locationRepository.findByCityAndLocationNameAndPinCode(locationDTO.getCity(), locationDTO.getLocationName(), locationDTO.getPincode());
+        if(location.isPresent()){
+            return true;
+        }
+        return false;
     }
 
     private Location convertJsonToLocation(String jsonProperty) {

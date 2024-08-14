@@ -8,6 +8,9 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Component
@@ -37,5 +40,20 @@ public class JwtTokenUtils {
         }
         return "No Token Found";
     }
+    public List<String> extractRoleFromToken(String authtoken) {
+        if (authtoken != null && authtoken.startsWith("Bearer ")) {
+            try {
+                String token = authtoken.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(token);
+                return decodedJWT.getClaim("roles").asList(String.class); // Extract the role claim
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        return new ArrayList<>();
+    }
+
 
 }

@@ -82,7 +82,7 @@ public class PropertyRent {
 
 
     private String propertyFor;
-    private double expected_Deposit;
+    private Double  expected_Deposit;
 //    private boolean rent_negotiable;
     private String gym;
     private String gatedSecurity;

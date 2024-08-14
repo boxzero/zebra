@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 public class BaseController {
@@ -22,6 +24,13 @@ public class BaseController {
         String username = jwtTokenUtils.extractUsernamefromToken(token);
         System.out.println("Logged in user::::: "+username);
         return username;
+    }
+
+    public List<String> extractRoleFromToken(String token){
+        JwtTokenUtils jwtTokenUtils=new JwtTokenUtils(applicationConfig);
+        List<String> roles = jwtTokenUtils.extractRoleFromToken(token);
+        System.out.println("Logged in user Role :::: "+roles);
+        return roles;
     }
 
 }

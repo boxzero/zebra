@@ -3,10 +3,12 @@ package com.houseclay.zebra.controller.property;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.houseclay.zebra.controller.BaseController;
 import com.houseclay.zebra.dto.PropertyRentDTO;
 
 import com.houseclay.zebra.dto.SaveAndUrlResponseDTO;
 import com.houseclay.zebra.dto.ViewAllPropertiesDTO;
+import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
 import com.houseclay.zebra.model.rental.Images;
 import com.houseclay.zebra.model.rental.PropertyRent;
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
 @Api(tags = "Rental Properties")
 //@RequestMapping(value = "/post-property-for-rent")
 @RequestMapping(value="/properties")
-public class PropertyRentController {
+public class PropertyRentController extends BaseController {
 
 
     @Autowired
@@ -142,7 +144,7 @@ public class PropertyRentController {
 
     // view specific property
     @GetMapping("/view-properties/{property_id}")
-    public ResponseEntity<PropertyRent>viewSpecificProperty(@PathVariable("property_id") UUID property_id) throws FileNotFoundException {
+    public ResponseEntity<PropertyRent>viewSpecificProperty(@PathVariable("property_id") UUID property_id) throws IdNotFoundException {
             PropertyRent propertyRent=propertyRentService.viewSpecificProperty(property_id);
             return ResponseEntity.status(HttpStatus.OK).body(propertyRent);
     }
@@ -173,9 +175,9 @@ public class PropertyRentController {
     @ApiOperation(value="Post a Property 2 ",response = PropertyRent.class)
     @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> saveProperty(@RequestPart("property-for-rent") String jsonProperty,
-                                                                                  @RequestPart("images") List<MultipartFile> images)
+                                                                                  @RequestPart("images") List<MultipartFile> images, @RequestHeader("Authorization") String token)
     {
-        String folderUrl=propertyRentService.saveProperty(jsonProperty, images);
+        String folderUrl=propertyRentService.saveProperty(jsonProperty, images, findUsernameFromHeader(token));
         return ResponseEntity.status(HttpStatus.OK).body(folderUrl);
     }
 
@@ -185,9 +187,10 @@ public class PropertyRentController {
     @PutMapping("updateProperty/multipart/{propertyId}")
     @ApiOperation(value="update property")
     @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> updateProperty2(@PathVariable("propertyId") UUID propertyId, @RequestPart("property-for-rent") String jsonProperty, @RequestPart("images") List<MultipartFile>images) throws FileNotFoundException {
+    public ResponseEntity<String> updateProperty2(@PathVariable("propertyId") UUID propertyId, @RequestPart("property-for-rent") String jsonProperty, @RequestPart("images") List<MultipartFile>images,
+                                                  @RequestHeader("Authorization") String token) throws IdNotFoundException {
         PropertyRent propertyRent=propertyRentService.convertStringToObject(jsonProperty);
-        propertyRentService.updatePropertyMultipartData(propertyId, propertyRent, images);
+        propertyRentService.updatePropertyMultipartData(propertyId, propertyRent, images, findUsernameFromHeader(token));
         return ResponseEntity.status(HttpStatus.OK).body("successfully updated !");
     }
 
