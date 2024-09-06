@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +37,9 @@ public class CloudOperations {
     }
 
 
-    public void uploadImagesToFolder(List<Images> images, String folderName){
+    public List<String> uploadImagesToFolder(List<Images> images, String folderName){
+        List<String> imagesUrls = new ArrayList<>();
+        // have to handle exceptions(use try catch block)
         for(Images image : images){
             String fileName=System.currentTimeMillis()+"_"+UUID.randomUUID()+"_"+image.getName();
             File file=new File(fileName);
@@ -46,12 +49,15 @@ public class CloudOperations {
             catch(Exception e){
                 e.printStackTrace();
             }
+
             s3Client.putObject(bucketName+"/"+folderName, fileName, file);
+            String imageUrl = "https://" + bucketName + ".s3.amazonaws.com/" + folderName + "/" + fileName;
 
-
+            imagesUrls.add(imageUrl);
             image.setImageNameInCloud(fileName);
             file.delete();
         }
+        return imagesUrls;
 
     }
 

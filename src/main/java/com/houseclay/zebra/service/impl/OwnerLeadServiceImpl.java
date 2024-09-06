@@ -2,7 +2,9 @@ package com.houseclay.zebra.service.impl;
 
 import com.houseclay.zebra.dto.OwnerLeadDTO;
 import com.houseclay.zebra.dto.OwnerLeadListDTO;
+import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.common.BaseTimeStamp;
+import com.houseclay.zebra.model.lead.CallHistory;
 import com.houseclay.zebra.model.lead.Lead;
 import com.houseclay.zebra.model.lead.LeadOwner;
 import com.houseclay.zebra.model.lead.enums.*;
@@ -113,4 +115,42 @@ public class OwnerLeadServiceImpl implements OwnerLeadService {
         log.info("Owner Lead",leadOwner);
         return leadOwner;
     }
+
+
+
+   public void saveAndChangeLeadOwnerStatus(String leadFinalStatus, LeadOwner leadOwner) {
+      if (leadFinalStatus == null || leadOwner == null) {
+        throw new IllegalArgumentException("Lead final status or LeadOwner cannot be null");
+      }
+
+
+        switch (leadFinalStatus) {
+            case "CALL_BACK_LATER":
+                leadOwner.setLeadStatus(LeadStatus.CALL_BACK_LATER);
+                break;
+            case "CUSTOMER_AGREED":
+                leadOwner.setLeadStatus(LeadStatus.CUSTOMER_AGREED);
+                break;
+            case "VISIT_SCHEDULED":
+                leadOwner.setLeadStatus(LeadStatus.VISIT_SCHEDULED);
+                break;
+            case "REJECTED":
+                leadOwner.setLeadStatus(LeadStatus.REJECTED);
+                break;
+            case "INVALID_LEAD":
+                leadOwner.setLeadStatus(LeadStatus.INVALID_LEAD);
+                break;
+            case "ONBOARDED":
+                leadOwner.setLeadStatus(LeadStatus.ONBOARDED);
+                break;
+            default:
+                leadOwner.setLeadStatus(LeadStatus.OTHERS);
+                break;
+        }
+
+        log.info("Owner lead status updated to: {}", leadOwner.getLeadStatus());
+        ownerLeadRepository.save(leadOwner);
+        }
 }
+
+

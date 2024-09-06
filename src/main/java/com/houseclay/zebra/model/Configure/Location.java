@@ -24,8 +24,9 @@ public class Location {
         @GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
         private UUID locationId;
         private String locationName;
-        private String pinCode;
+        private Long pinCode;
         private String city;
+        private String state;
         @Embedded
         private BaseTimeStamp baseTimeStamp;
 

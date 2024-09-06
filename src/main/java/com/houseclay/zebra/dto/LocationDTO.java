@@ -13,5 +13,6 @@ public class LocationDTO {
 
     private String city;
     private String locationName;
-    private String pincode;
+    private Long pincode;
+    private String state;
 }

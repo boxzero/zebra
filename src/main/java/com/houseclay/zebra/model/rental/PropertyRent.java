@@ -29,16 +29,16 @@ public class PropertyRent {
     private UUID property_id;
 
     @Column(nullable = false)
-    private String name;  //name of the society or apartment or the building
+    private String name;
 
     @Column(nullable = true)
-    private String title; // 2bhk...
+    private String title;
 
     @OneToOne(targetEntity = Owner.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_reference_id",referencedColumnName = "owner_id")
     private Owner owner;
 
-    private boolean isManaged;
+    private boolean isManaged; //false by default
 
     @Embedded
     PropertySpecs propertySpecs;
@@ -48,9 +48,9 @@ public class PropertyRent {
     private List<Images> imageMap;
 
     @Column(nullable = false)
-    private boolean active_status;
+    private boolean active_status; // false by default
 
-    private String inactive_reason;
+    private String inactive_reason; // null
 
     @Column(nullable = false)
     private Date posted_on;
@@ -60,17 +60,18 @@ public class PropertyRent {
     private Date available_from;
 
     @Column(nullable = false)
-//    @Temporal(TemporalType.DATE)
     private double property_rent;
 
     @Column(nullable = false)
     private double property_maintenance;
 
-    private String preferred_tenant_type;
 
-    @OneToMany(targetEntity = Tenant.class,cascade = CascadeType.ALL)
-    @JoinColumn(name="mapped_to_property",referencedColumnName = "property_id")
-    private List<Tenant> tenantList;
+    @ElementCollection
+    @CollectionTable(name = "preferred_tenant_types", joinColumns = @JoinColumn(name = "property_id"))
+    @Column(name = "tenant_type")
+    private List<String> preferred_tenant_type;
+
+
 
     @Embedded
     private BaseTimeStamp baseTimeStamp;
@@ -83,12 +84,19 @@ public class PropertyRent {
 
     private String propertyFor;
     private Double  expected_Deposit;
-//    private boolean rent_negotiable;
-    private String gym;
-    private String gatedSecurity;
+    private boolean rent_negotiable;
+
     private String who_will_show_the_property;
     private String showProperty_contact;
 
+    private String availability;
+    private String startTime;
+    private String endTime;
+
+    @ElementCollection
+    @CollectionTable(name="image_urls", joinColumns = @JoinColumn(name="property_id"))
+    @Column(name = "image_url")
+    private List<String> imagesUrls;
 
 
 }

@@ -13,4 +13,5 @@ public interface TenantLeadService {
 
     Page<LeadTenant> findAllLeads(Pageable pageable);
 
+    void saveAndChangeLeadTenantStatus(String leadFinalStatus, LeadTenant leadTenant);
 }

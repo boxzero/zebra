@@ -36,6 +36,7 @@ public class LocationServiceImpl implements LocationService {
                     .city(locationDTO.getCity())
                     .locationName(locationDTO.getLocationName())
                     .pinCode(locationDTO.getPincode())
+                    .state(locationDTO.getState())
                     .baseTimeStamp(BaseTimeStamp.builder()
                             .created_by(loggedInUser)
                             .created_on(new Date())
@@ -69,6 +70,7 @@ public class LocationServiceImpl implements LocationService {
             existingLocation.setLocationName(locationDTO.getLocationName());
             existingLocation.setPinCode(locationDTO.getPincode());
             existingLocation.setCity(locationDTO.getCity());
+            existingLocation.setState(locationDTO.getState());
             existingLocation.setBaseTimeStamp(baseTimeStamp);
 
             existingLocation=locationRepository.save(existingLocation);
@@ -84,33 +86,28 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public boolean deleteLocation(UUID locationId, List<String> roles) throws IdNotFoundException{
+    public String deleteLocation(UUID locationId) throws IdNotFoundException{
         Optional<Location> location = locationRepository.findById(locationId);
         if(!location.isPresent()){
             throw new IdNotFoundException(locationId, "location Id  not found !");
         }
-        boolean authorizedUserToDelete=true;
-        System.out.println(roles+"-------------------------");
+
         try {
-            if (roles.contains("ROLE_SUPER_ADMIN")) {
                 locationRepository.deleteById(locationId);
                 log.info("Location deleted Successfully !");
-            } else {
-                authorizedUserToDelete = false;
-            }
         }catch(Exception ex){
             log.error("Unable to Delete location", ex);
             throw new RuntimeException("Unable to Delete location", ex);
         }
 
-        return authorizedUserToDelete;
+       return "Location deleted Successfully !";
 
     }
 
     @Override
-    public ResponseEntity<List<Location>> viewAllLocations() {
+    public List<Location> viewAllLocations() {
         List<Location> allLocations=locationRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(allLocations);
+        return allLocations;
     }
 
     @Override

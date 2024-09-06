@@ -14,8 +14,8 @@ public interface LocationService {
 
     public Location addLocation(LocationDTO locationDTO, String username);
     public Location editLocation(UUID locationId, LocationDTO locationDTO,  String username) throws IdNotFoundException;
-    public boolean deleteLocation(UUID locationId, List<String> roles) throws IdNotFoundException;
-    public ResponseEntity<List<Location>> viewAllLocations();
+    public String deleteLocation(UUID locationId) throws IdNotFoundException;
+    public List<Location> viewAllLocations();
 
     public boolean checkForExistingLocation(LocationDTO locationDTO);
 }

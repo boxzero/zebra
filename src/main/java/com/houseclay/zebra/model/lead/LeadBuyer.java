@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -43,4 +44,12 @@ public class LeadBuyer {
     private Date occupancyDate;
 
     private Boolean isDateFlexible;
+
+    @OneToMany(targetEntity = CallHistory.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="lead_buyer_id", referencedColumnName = "_buyer_lead_id")
+    private List<CallHistory> callHistory;
+
+    public  void addCallToCallHistory(CallHistory call){
+        this.callHistory.add(call);
+    }
 }

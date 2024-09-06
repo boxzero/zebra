@@ -7,9 +7,7 @@ import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.rental.PropertyRent;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public interface PropertRentService {
@@ -25,7 +23,7 @@ public interface PropertRentService {
     PropertyRent updatePropertyForRentById(UUID uuid);
 
 
-    String saveProperty(String jsonProperty, List<MultipartFile> images, String username);
+    String saveProperty(String jsonProperty, List<MultipartFile> images, String username) ;
 
     PropertyRent updatePropertyMultipartData(UUID propertyId, PropertyRent newProperty, List<MultipartFile> images, String username) throws IdNotFoundException;
 

@@ -22,12 +22,11 @@ public class PropertySpecs {
     @Column(nullable = false)
     private String type;     // apartment , society , standalone
 
-    private double super_area;
+    private double build_up_area;
 
-    private double carpet_area;
 
     @Column(nullable = false)
-    private int beds;
+    private String beds;
 
     @Column(nullable = false)
     private int bath;
@@ -48,7 +47,7 @@ public class PropertySpecs {
     private String furnishing;
 
 
-    private String flooring;
+    private String flooring; // null
 
     @Column(nullable = false)
     private String city;
@@ -61,15 +60,13 @@ public class PropertySpecs {
     @JoinColumn(name = "amenitiesMap",referencedColumnName = "amenities_id")
     private Amenities amenitiesMap;
 
-    private String latitude;
+    private String latitude; // null
 
-    private String longitude;
+    private String longitude; // null
 
-    private String locationurl;
+    private String locationurl; // null
 
 //    -----------------------------------------------------------------
-    @Column(nullable = false)
-    private String bhkType;
 
     @Column(nullable = false)
     private int totalFloors;

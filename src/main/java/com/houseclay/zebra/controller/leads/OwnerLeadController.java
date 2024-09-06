@@ -3,6 +3,8 @@ package com.houseclay.zebra.controller.leads;
 import com.houseclay.zebra.controller.BaseController;
 import com.houseclay.zebra.dto.OwnerLeadDTO;
 import com.houseclay.zebra.dto.OwnerLeadListDTO;
+import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
+import com.houseclay.zebra.model.lead.CallHistory;
 import com.houseclay.zebra.model.lead.LeadOwner;
 import com.houseclay.zebra.service.impl.OwnerLeadServiceImpl;
 import io.swagger.annotations.Api;
@@ -53,5 +55,14 @@ public class OwnerLeadController extends BaseController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ownerLeadService.fetchOwnerLeadById(UUID.fromString(uuid)).get());
     }
+
+//    @GetMapping("/v1/call-history/{id}")
+//    public ResponseEntity<List<CallHistory>> fetchCallHistory(@PathVariable("id") String leadOwnerId) throws IdNotFoundException {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ownerLeadService.fetchCallHistory(UUID.fromString(leadOwnerId)));
+//    }
+
+
+
 
 }

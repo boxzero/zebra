@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,8 +39,8 @@ public class LeadTenant {
     @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
 
-    private String leadStatus;
-    //    private LeadStatus leadStatus;
+//    private String leadStatus;
+        private LeadStatus leadStatus;
 
     private String preferredLocations;
 
@@ -56,4 +57,12 @@ public class LeadTenant {
     private Boolean isHavingPets;
 
     private Boolean isLookingForARoom;
+
+    @OneToMany(targetEntity = CallHistory.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="lead_tenant_id", referencedColumnName = "_tenant_lead_id")
+    private List<CallHistory> callHistory;
+
+    public  void addCallToCallHistory(CallHistory call){
+        this.callHistory.add(call);
+    }
 }

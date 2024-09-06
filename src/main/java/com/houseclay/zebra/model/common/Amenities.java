@@ -41,6 +41,8 @@ public class Amenities {
     private boolean visitor_parking;
     private boolean gas_pilpeline;
     private boolean shopping_centre;
+    private boolean gym;
+    private boolean nonVegAllowed;
 
 
 }

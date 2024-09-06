@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.houseclay.zebra.model.lead.enums.LeadStatus;
 import com.houseclay.zebra.model.lead.enums.PreferredTenant;
 import com.houseclay.zebra.model.lead.enums.PropertyType;
+import com.houseclay.zebra.model.tenant.Tenant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -57,6 +59,14 @@ public class LeadOwner {
     private Long expectedRent;
 
     private Long expectedDeposit;
+
+    @OneToMany(targetEntity = CallHistory.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="lead_owner_id", referencedColumnName = "_owner_lead_id")
+    private List<CallHistory> callHistory;
+
+    public  void addCallToCallHistory(CallHistory call){
+        this.callHistory.add(call);
+    }
 
 
 }

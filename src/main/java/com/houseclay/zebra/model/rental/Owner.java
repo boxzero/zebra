@@ -28,17 +28,16 @@ public class Owner {
 
     private String owner_contact;
 
-    private String owner_pan;
-
-    private String owner_contact_addr;
+    // ------------- remove this below 2 commented fields
+//    private String owner_pan;//remove
+//
+//    private String owner_contact_addr; //remove
 
 
     private String notes;
 
-    // ----------------- ------------
-    private String availability;
-    private String startTime;
-    private String endTime;
+    // ----------------- ------------ add in property
+
 
 
 }

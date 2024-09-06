@@ -70,6 +70,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/tenant-management/**").hasAnyAuthority("ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/post-property-for-rent/**").hasAnyAuthority("ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/owner-leads/**").hasAnyAuthority("ROLE_SUPER_ADMIN","ROLE_LEAD_MANAGEMENT");
+        http.authorizeRequests().antMatchers("/configure/delete-location/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
+
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

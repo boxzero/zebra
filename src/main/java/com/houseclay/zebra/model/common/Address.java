@@ -25,6 +25,7 @@ public class Address {
     private UUID addr_id;
     private String house_no;
     private String street_name;
+    private String locality;
     private String property_name; //flat name or apartment name or society name
     private Long pincode;
     private String city;

@@ -17,4 +17,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         ErrorMessage errorMessage=ErrorMessage.builder().id(ex.getId()).description(ex.getMessage()).build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
+
+
 }

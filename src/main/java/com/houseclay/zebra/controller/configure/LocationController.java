@@ -53,16 +53,13 @@ public class LocationController extends BaseController {
 
     @GetMapping("/view-all-locations")
     public ResponseEntity<List<Location>> viewAllLocations(){
-        return locationService.viewAllLocations();
+        List<Location> allLocations =  locationService.viewAllLocations();
+        return ResponseEntity.ok(allLocations);
     }
 
     @DeleteMapping("/delete-location/{locationId}")
-    public ResponseEntity<String> deleteLocation(@PathVariable("locationId") UUID locationId, @RequestHeader("Authorization") String token) throws IdNotFoundException {
-        boolean authorizedToDeleteLocation=locationService.deleteLocation(locationId, extractRoleFromToken(token));
-        if(!authorizedToDeleteLocation){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied !");
-        }
-        return ResponseEntity.ok("Location Deleted Successfully");
+    public ResponseEntity<String> deleteLocation(@PathVariable("locationId") UUID locationId) throws IdNotFoundException {
+        return ResponseEntity.ok(locationService.deleteLocation(locationId));
     }
 
 }
