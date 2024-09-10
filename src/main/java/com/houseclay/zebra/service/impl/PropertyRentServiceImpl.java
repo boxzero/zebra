@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.houseclay.zebra.CloudOperations.CloudOperations;
+import com.houseclay.zebra.dto.AddPropertyDTOs.*;
 import com.houseclay.zebra.dto.PropertyRentDTO;
 import com.houseclay.zebra.dto.SaveAndUrlResponseDTO;
 import com.houseclay.zebra.dto.ViewAllPropertiesDTO;
@@ -101,7 +102,7 @@ public class PropertyRentServiceImpl implements PropertRentService {
 
 
 
-    // delete property for Database and CLOUD
+    // delete property from Database and CLOUD
     @Override
     public Boolean deletePropertyForRentById(UUID uuid) {
 
@@ -287,31 +288,7 @@ return list_of_Images;
 
 
 
-    @Override
-    public String saveProperty(String jsonProperty, List<MultipartFile> images, String loggedInUser) {
 
-            PropertyRent propertyRent = convertStringToObject(jsonProperty);
-            BaseTimeStamp baseTimeStamp = BaseTimeStamp.builder().created_by(loggedInUser).created_on(new Date()).build();
-            propertyRent.setBaseTimeStamp(baseTimeStamp);
-            List<Images> list_of_Images = convertMulipartToListOfImages(images, loggedInUser);
-            propertyRent.setImageMap(list_of_Images);
-
-            String folderName = propertyRent.getName() + "___" + UUID.randomUUID();
-
-            CloudOperations cloudOperations = new CloudOperations(s3Client, bucketName);
-            String folderUrl = cloudOperations.createFolder(folderName);
-
-            List<String> imagesUrls = cloudOperations.uploadImagesToFolder(list_of_Images, folderName);
-            propertyRent.setFolderUrl(folderUrl);
-            propertyRent.setFolderName(folderName);
-            propertyRent.setImagesUrls(imagesUrls);
-
-
-            propertyForRentRepository.save(propertyRent);
-            return folderUrl;
-
-
-    }
 
 
 
@@ -364,114 +341,137 @@ return list_of_Images;
 
 
 
-    public PropertyRent convertStringToObject(String jsonProperty){
-        PropertyRent propertyRent=new PropertyRent();
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-
-            JsonNode propertyData = objectMapper.readTree(jsonProperty);
-
-            JsonNode localityDetails = propertyData.get("localityDetails");
-            JsonNode rentalDetails = propertyData.get("rentalDetails");
-
-            JsonNode ownerDetails = propertyData.get("ownerDetails");
-            JsonNode amenities = propertyData.get("amenities");
-            JsonNode schedule = propertyData.get("schedule");
-            JsonNode amenitiesMap = amenities.get("amenities");
-            JsonNode propertyDetails = propertyData.get("propertyDetails");
 
 
+    private PropertyRent convertJsonToProperty(String jsonProperty) {
+        AddPropertyDTO addPropertyDTO = new AddPropertyDTO();
+        PropertyRent propertyRent = new PropertyRent();
+        try{
+
+            ObjectMapper objectMapper=new ObjectMapper();
+            addPropertyDTO = objectMapper.readValue(jsonProperty, AddPropertyDTO.class);
 
 
-            List<String> preferredTenants = new ArrayList<>();
-            if (rentalDetails != null) {
-                JsonNode preferredTenantsNode = rentalDetails.get("preferredTenanats");
-                // Convert JsonNode to List<String>
-                if (preferredTenantsNode != null && preferredTenantsNode.isArray()) {
-                     preferredTenants = objectMapper.convertValue(preferredTenantsNode, List.class);
-                }
-            }
+            AmenitiesDTO amenitiesDTO = addPropertyDTO.getAmenities();
+            LocalityDetailsDTO localityDetailsDTO = addPropertyDTO.getLocalityDetails();
+            OwnerDetailsDTO ownerDetailsDTO = addPropertyDTO.getOwnerDetails();
+            PropertyDetailsDTO propertyDetailsDTO = addPropertyDTO.getPropertyDetails();
+            RentalDetailsDTO rentalDetailsDTO = addPropertyDTO.getRentalDetails();
+            ScheduleDTO scheduleDTO = addPropertyDTO.getSchedule();
+            Map<String ,Boolean> amenitiesMap = amenitiesDTO.getAmenities();
 
-            Owner ownerObject = Owner.builder().owner_id(UUID.randomUUID()).owner_name(ownerDetails.get("firstName").asText() + " " + ownerDetails.get("lastName").asText()).owner_contact(ownerDetails.get("contactNumber").asText()).owner_email(ownerDetails.get("Email").asText()).notes(ownerDetails.get("Notes").asText()).build();
 
-            Optional<Location> location = locationRepository.findByCity(localityDetails.get("city").asText());
-            Address address = Address.builder().addr_id(UUID.randomUUID()).city(localityDetails.get("city").asText()).street_name(localityDetails.get("Landmark").asText()).locality(localityDetails.get("locality").asText()).property_name(propertyDetails.get("name").asText()).house_no(localityDetails.get("houseNumber").asText()).state(location.get().getState()).pincode(location.get().getPinCode()).build();
-
-            Amenities amenitiesObject = Amenities.builder().lift(amenitiesMap.get("lift").asBoolean()).
-                    club_house(amenitiesMap.get("clubHouse").asBoolean()).
-                    intercom(amenitiesMap.get("intercom").asBoolean()).
-                    swimming_pool(amenitiesMap.get("swimmingPool").asBoolean()).
-                    children_play_area(amenitiesMap.get("childrenPlayArea").asBoolean()).
-                    fire_safety(amenitiesMap.get("fireSafety").asBoolean()).
-                    security(amenitiesMap.get("security").asBoolean()).
-                    park(amenitiesMap.get("park").asBoolean()).
-                    rain_water_harvesting(amenitiesMap.get("rainwaterHarvesting").asBoolean()).
-                    sewage_treatment_plant(amenitiesMap.get("sewageTreatmentPlant").asBoolean()).
-                    housekeeping(amenitiesMap.get("housekeeping").asBoolean()).
-                    power_backup(amenitiesMap.get("powerBackup").asBoolean())
-                    .internet_services(amenitiesMap.get("internetServices").asBoolean())
-                    .servant_room(amenitiesMap.get("servantRoom").asBoolean())
-                    .gas_pilpeline(amenitiesMap.get("gasPipeline").asBoolean())
-                    .shopping_centre(amenitiesMap.get("shoppingCentre").asBoolean())
-                    .gym((amenities.get("Gym").asText().equals("yes")))
-                    .security(amenities.get("GatedSecurity").asText().equals("yes"))
-                    .nonVegAllowed(amenities.get("NonVegAllowed").equals("yes"))
+            Owner owner = Owner.builder()
+                    .owner_name(ownerDetailsDTO.getFirstName()+" "+ownerDetailsDTO.getLastName())
+                    .owner_email(ownerDetailsDTO.getEmail())
+                    .owner_contact(ownerDetailsDTO.getContactNumber())
+                    .notes(ownerDetailsDTO.getNotes())
                     .build();
 
+            Optional<Location> location = locationRepository.findByCity(localityDetailsDTO.getCity());
+            System.out.println(location);
+            Address address = Address.builder()
+                    .city(localityDetailsDTO.getCity())
+                    .street_name(localityDetailsDTO.getLandmark()).
+                    locality(localityDetailsDTO.getLocality())
+                    .property_name(propertyDetailsDTO.getName())
+                    .house_no(localityDetailsDTO.getHouseNumber())
+                    .state(location.get().getState())
+                    .pincode(location.get().getPinCode())
+                    .build();
 
+            Amenities amenitiesObject = Amenities.builder()
+                    .lift(amenitiesMap.get("lift"))
+                    .club_house(amenitiesMap.get("clubHouse"))
+                    .intercom(amenitiesMap.get("intercom"))
+                    .swimming_pool(amenitiesMap.get("swimmingPool"))
+                    .children_play_area(amenitiesMap.get("childrenPlayArea"))
+                    .fire_safety(amenitiesMap.get("fireSafety"))
+                    .security(amenitiesMap.get("security"))
+                    .park(amenitiesMap.get("park"))
+                    .rain_water_harvesting(amenitiesMap.get("rainwaterHarvesting"))
+                    .sewage_treatment_plant(amenitiesMap.get("sewageTreatmentPlant"))
+                    .housekeeping(amenitiesMap.get("housekeeping"))
+                    .power_backup(amenitiesMap.get("powerBackup"))
+                    .internet_services(amenitiesMap.get("internetServices"))
+                    .servant_room(amenitiesMap.get("servantRoom"))
+                    .gas_pilpeline(amenitiesMap.get("gasPipeline"))
+                    .shopping_centre(amenitiesMap.get("shoppingCentre"))
+                    .gym((amenitiesDTO.getGym().equals("yes")))
+                    .security(amenitiesDTO.getGatedSecurity().equals("yes"))
+                    .nonVegAllowed(amenitiesDTO.getNonVegAllowed().equals("yes"))
+                    .build();
 
-
-
-            PropertySpecs propertySpecs = PropertySpecs.builder().full_address(address)
-                    .type(propertyDetails.get("type").asText())
-                    .build_up_area(propertyDetails.get("builtupArea").asDouble())
-                    .bath(amenities.get("Bathroom").asInt())
-                    .balcony(amenities.get("Balcony").asInt())
-                    .parking(rentalDetails.get("parking").asText())
-                    .facing(propertyDetails.get("facing").asText())
-                    .property_age(propertyDetails.get("propertyAge").asText())
-                    .furnishing(rentalDetails.get("furniture").asText())
-                    .city(localityDetails.get("city").asText())
-                    .description(rentalDetails.get("Description").asText())
+            PropertySpecs propertySpecs = PropertySpecs.builder()
+                    .full_address(address)
+                    .type(propertyDetailsDTO.getType())
+                    .build_up_area(propertyDetailsDTO.getBuiltupArea())
+                    .bath(amenitiesDTO.getBathroom())
+                    .balcony(amenitiesDTO.getBathroom())
+                    .parking(rentalDetailsDTO.getParking())
+                    .facing(propertyDetailsDTO.getFacing())
+                    .property_age(propertyDetailsDTO.getPropertyAge())
+                    .furnishing(rentalDetailsDTO.getFurniture())
+                    .city(localityDetailsDTO.getCity())
+                    .description(rentalDetailsDTO.getDescription())
                     .amenitiesMap(amenitiesObject)
-                    .beds(propertyDetails.get("bhkType").asText().substring(0, 2))
-                    .totalFloors(propertyDetails.get("totalFloor").asInt())
-                    .floor(propertyDetails.get("floor").asInt())
-
+                    .beds(propertyDetailsDTO.getBhkType().substring(0, 2))
+                    .totalFloors(propertyDetailsDTO.getTotalFloor())
+                    .floor(propertyDetailsDTO.getFloor())
                     .build();
 
 
             propertyRent = PropertyRent.builder()
-                    .property_id(UUID.randomUUID())
-
-                    .name(propertyDetails.get("name").asText())
-                    .title(propertyDetails.get("bhkType").asText()+" in "+propertyDetails.get("name"))
-                    .owner(ownerObject)
-                    .availability(schedule.get("Availability").asText())
-                    .startTime(schedule.get("StartTime").asText())
-                    .endTime(schedule.get("EndTime").asText())
+                    .name(propertyDetailsDTO.getName())
+                    .title(propertyDetailsDTO.getBhkType()+" in "+propertyDetailsDTO.getName())
+                    .owner(owner)
+                    .availability(scheduleDTO.getAvailability())
+                    .startTime(scheduleDTO.getStartTime())
+                    .endTime(scheduleDTO.getEndTime())
                     .propertySpecs(propertySpecs)
                     .posted_on(new Date())
-                    .property_rent(rentalDetails.get("ExpectedRent").asDouble())
-                    .property_maintenance(rentalDetails.get("expectedMaintenance").asDouble())
-                    .preferred_tenant_type(preferredTenants)
-                    .rent_negotiable(rentalDetails.get("rentNegotiable").asBoolean())
-                    .expected_Deposit(rentalDetails.get("ExpectedDeposit").asDouble())
-                    .who_will_show_the_property(amenities.get("showProperty").asText())
-                    .showProperty_contact(amenities.get("contactNumber").asText())
-                    .propertyFor(rentalDetails.get("propertyAvailable").asText())
-
+                    .property_rent(rentalDetailsDTO.getExpectedRent())
+                    .property_maintenance(rentalDetailsDTO.getExpectedMaintenance())
+                    .preferred_tenant_type(rentalDetailsDTO.getPreferredTenants())
+                    .rent_negotiable(rentalDetailsDTO.isRentNegotiable())
+                    .expected_Deposit(rentalDetailsDTO.getExpectedDeposit())
+                    .who_will_show_the_property(amenitiesDTO.getShowProperty())
+                    .showProperty_contact(amenitiesDTO.getContactNumber())
+                    .propertyFor(rentalDetailsDTO.getPropertyAvailable())
+                    .available_from(rentalDetailsDTO.getAvailableFrom())
                     .build();
-
-
-            Date date = Date.from(Instant.parse(rentalDetails.get("AvailableFrom").asText()));
-            propertyRent.setAvailable_from(date);
         }catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to convert json");
 
         }
+        return propertyRent;
+    }
 
-                return propertyRent;
+    @Override
+    public String saveProperty(String jsonProperty, List<MultipartFile> images, String loggedInUser) {
+
+        PropertyRent propertyRent = convertJsonToProperty(jsonProperty);
+        BaseTimeStamp baseTimeStamp = BaseTimeStamp.builder().created_by(loggedInUser).created_on(new Date()).build();
+        propertyRent.setBaseTimeStamp(baseTimeStamp);
+        List<Images> list_of_Images = convertMulipartToListOfImages(images, loggedInUser);
+        propertyRent.setImageMap(list_of_Images);
+
+        String folderName = propertyRent.getName() + "___" + UUID.randomUUID();
+
+        CloudOperations cloudOperations = new CloudOperations(s3Client, bucketName);
+        String folderUrl = cloudOperations.createFolder(folderName);
+
+        List<String> imagesUrls = cloudOperations.uploadImagesToFolder(list_of_Images, folderName);
+        propertyRent.setFolderUrl(folderUrl);
+        propertyRent.setFolderName(folderName);
+        propertyRent.setImagesUrls(imagesUrls);
+
+
+        propertyForRentRepository.save(propertyRent);
+        return folderUrl;
+
+
     }
 
 

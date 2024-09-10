@@ -1,7 +1,9 @@
 package com.houseclay.zebra.controller.property;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.houseclay.zebra.controller.BaseController;
+import com.houseclay.zebra.dto.AddPropertyDTOs.AddPropertyDTO;
 import com.houseclay.zebra.dto.PropertyRentDTO;
 
 import com.houseclay.zebra.dto.SaveAndUrlResponseDTO;
@@ -162,28 +164,30 @@ public class PropertyRentController extends BaseController {
 
 
 
-    // save property using multipart images
-    @PostMapping("/post-new-rental-property")
-    @ApiOperation(value="Post a Property 2 ",response = PropertyRent.class)
-    @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> saveProperty(@RequestPart("property-for-rent") String jsonProperty,
-                                                                                  @RequestPart("images") List<MultipartFile> images, @RequestHeader("Authorization") String token)
-    {
-        String folderUrl=propertyRentService.saveProperty(jsonProperty, images, findUsernameFromHeader(token));
-        return ResponseEntity.status(HttpStatus.OK).body(folderUrl);
-    }
-
-
-
     // update property using multipart images
     @PutMapping("/updateProperty/{propertyId}")
     @ApiOperation(value="update property")
     @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> updateProperty2(@PathVariable("propertyId") UUID propertyId, @RequestPart("property-for-rent") String jsonProperty, @RequestPart("images") List<MultipartFile>images,
                                                   @RequestHeader("Authorization") String token) throws IdNotFoundException {
-        PropertyRent propertyRent=propertyRentService.convertStringToObject(jsonProperty);
-        return ResponseEntity.status(HttpStatus.OK).body("successfully updated !");
+
+        // need to work on this NOT SURE ABOUT DTO
+        return null;
     }
+
+
+
+
+    @PostMapping("/post-new-rental-property")
+    @ApiOperation(value="Post a Property 2 ",response = PropertyRent.class)
+    @Consumes({MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> saveProperty(@RequestPart("property-for-rent") String jsonProperty,
+                                               @RequestPart("images") List<MultipartFile> images, @RequestHeader("Authorization") String token)
+    {
+        String folderUrl=propertyRentService.saveProperty(jsonProperty, images, findUsernameFromHeader(token));
+        return ResponseEntity.status(HttpStatus.OK).body(folderUrl);
+    }
+
 
 
 

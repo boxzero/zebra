@@ -28,15 +28,9 @@ public class Owner {
 
     private String owner_contact;
 
-    // ------------- remove this below 2 commented fields
-//    private String owner_pan;//remove
-//
-//    private String owner_contact_addr; //remove
-
-
     private String notes;
 
-    // ----------------- ------------ add in property
+
 
 
 
