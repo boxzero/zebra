@@ -8,6 +8,7 @@ import com.houseclay.zebra.dto.PropertyRentDTO;
 
 import com.houseclay.zebra.dto.SaveAndUrlResponseDTO;
 import com.houseclay.zebra.dto.ViewAllPropertiesDTO;
+import com.houseclay.zebra.dto.ViewSpecificPropertyDTO;
 import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.rental.PropertyRent;
 import com.houseclay.zebra.service.ImagesService;
@@ -138,9 +139,9 @@ public class PropertyRentController extends BaseController {
 
     // view specific property
     @GetMapping("/view-properties/{property_id}")
-    public ResponseEntity<PropertyRent>viewSpecificProperty(@PathVariable("property_id") UUID property_id) throws IdNotFoundException {
-            PropertyRent propertyRent=propertyRentService.viewSpecificProperty(property_id);
-            return ResponseEntity.status(HttpStatus.OK).body(propertyRent);
+    public ResponseEntity<ViewSpecificPropertyDTO>viewSpecificProperty(@PathVariable("property_id") UUID property_id) throws IdNotFoundException {
+            ViewSpecificPropertyDTO viewSpecificPropertyDTO=propertyRentService.viewSpecificProperty(property_id);
+            return ResponseEntity.status(HttpStatus.OK).body(viewSpecificPropertyDTO);
     }
 
 

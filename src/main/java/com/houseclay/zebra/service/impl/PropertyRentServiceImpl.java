@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.houseclay.zebra.CloudOperations.CloudOperations;
+import com.houseclay.zebra.dto.*;
 import com.houseclay.zebra.dto.AddPropertyDTOs.*;
-import com.houseclay.zebra.dto.PropertyRentDTO;
-import com.houseclay.zebra.dto.SaveAndUrlResponseDTO;
-import com.houseclay.zebra.dto.ViewAllPropertiesDTO;
 import com.houseclay.zebra.exceptionHandling.IdNotFoundException;
 import com.houseclay.zebra.model.Configure.Location;
 import com.houseclay.zebra.model.common.Address;
@@ -19,7 +17,6 @@ import com.houseclay.zebra.model.common.PropertySpecs;
 import com.houseclay.zebra.model.rental.Images;
 import com.houseclay.zebra.model.rental.Owner;
 import com.houseclay.zebra.model.rental.PropertyRent;
-import com.houseclay.zebra.dto.ImageResponse;
 import com.houseclay.zebra.repository.ImageRepository;
 import com.houseclay.zebra.repository.LocationRepository;
 import com.houseclay.zebra.repository.PropertyForRentRepository;
@@ -244,7 +241,16 @@ public class PropertyRentServiceImpl implements PropertRentService {
         List<ViewAllPropertiesDTO> allProperties=new ArrayList<>();
         List<PropertyRent>l= propertyForRentRepository.findAll();
         for(PropertyRent p: l){
-            ViewAllPropertiesDTO viewAllPropertiesDTO= ViewAllPropertiesDTO.builder().property_id(p.getProperty_id()).name(p.getName()).title(p.getTitle()).build();
+            ViewAllPropertiesDTO viewAllPropertiesDTO= ViewAllPropertiesDTO
+                    .builder()
+                    .property_id(p.getProperty_id())
+                    .name(p.getName())
+                    .bhkType(p.getPropertySpecs().getBeds()+" BHK")
+                    .locality(p.getPropertySpecs().getFull_address().getLocality())
+                    .rent(p.getProperty_rent())
+                    .availableFrom(p.getAvailable_from())
+                    .furniture(p.getPropertySpecs().getFurnishing())
+                    .build();
             allProperties.add(viewAllPropertiesDTO);
         }
         return allProperties;
@@ -254,12 +260,45 @@ public class PropertyRentServiceImpl implements PropertRentService {
 
 
 
-    public PropertyRent viewSpecificProperty(UUID propertyId) throws IdNotFoundException {
-        Optional<PropertyRent> propertyRent = propertyForRentRepository.findById(propertyId);
-            if (!propertyRent.isPresent()) {
-                throw new IdNotFoundException(propertyId, "PropetyRent Id not found !!");
-            }
-        return propertyRent.get();
+    @Override
+    public ViewSpecificPropertyDTO viewSpecificProperty(UUID propertyId) throws IdNotFoundException {
+        Optional<PropertyRent> propertyRentOptional = propertyForRentRepository.findById(propertyId);
+        if (!propertyRentOptional.isPresent()) {
+            throw new IdNotFoundException(propertyId, "PropetyRent Id not found !!");
+        }
+        PropertyRent propertyRent = propertyRentOptional.get();
+        ViewSpecificPropertyDTO viewSpecificPropertyDTO;
+        try {
+             viewSpecificPropertyDTO = ViewSpecificPropertyDTO
+                    .builder()
+                    .property_id(propertyRent.getProperty_id())
+                    .name(propertyRent.getName())
+                    .title(propertyRent.getTitle())
+                    .isManaged(propertyRent.isManaged())
+                    .propertySpecs(propertyRent.getPropertySpecs())
+                    .active_status(propertyRent.isActive_status())
+                    .inactive_reason(propertyRent.getInactive_reason())
+                    .posted_on(propertyRent.getPosted_on())
+                    .available_from(propertyRent.getAvailable_from())
+                    .property_rent(propertyRent.getProperty_rent())
+                    .property_maintenance(propertyRent.getProperty_maintenance())
+                    .preferred_tenant_type(propertyRent.getPreferred_tenant_type())
+                    .baseTimeStamp(propertyRent.getBaseTimeStamp())
+                    .propertyFor(propertyRent.getPropertyFor())
+                    .expected_Deposit(propertyRent.getExpected_Deposit())
+                    .rent_negotiable(propertyRent.isRent_negotiable())
+                    .who_will_show_the_property(propertyRent.getWho_will_show_the_property())
+                    .showProperty_contact(propertyRent.getShowProperty_contact())
+                    .availability(propertyRent.getAvailability())
+                    .startTime(propertyRent.getStartTime())
+                    .endTime(propertyRent.getEndTime())
+                    .build();
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to make DTO");
+
+        }
+        return viewSpecificPropertyDTO;
     }
 
 
@@ -369,7 +408,7 @@ return list_of_Images;
                     .build();
 
             Optional<Location> location = locationRepository.findByCity(localityDetailsDTO.getCity());
-            System.out.println(location);
+
             Address address = Address.builder()
                     .city(localityDetailsDTO.getCity())
                     .street_name(localityDetailsDTO.getLandmark()).
@@ -425,6 +464,7 @@ return list_of_Images;
                     .name(propertyDetailsDTO.getName())
                     .title(propertyDetailsDTO.getBhkType()+" in "+propertyDetailsDTO.getName())
                     .owner(owner)
+                    .bhkType(propertyDetailsDTO.getBhkType())
                     .availability(scheduleDTO.getAvailability())
                     .startTime(scheduleDTO.getStartTime())
                     .endTime(scheduleDTO.getEndTime())

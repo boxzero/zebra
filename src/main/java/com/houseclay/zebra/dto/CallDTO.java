@@ -17,10 +17,5 @@ public class CallDTO {
     private String leadFinalStatus;
     private String callNotes;
 
-//    private UUID leadOwnerId;
-//    private UUID leadBuyerId;
-//    private UUID leadSellerId;
-//    private UUID leadTenantId;
-
 
 }

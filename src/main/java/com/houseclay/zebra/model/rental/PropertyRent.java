@@ -85,7 +85,7 @@ public class PropertyRent {
     private String propertyFor;
     private Double  expected_Deposit;
     private boolean rent_negotiable;
-
+    private String bhkType;
     private String who_will_show_the_property;
     private String showProperty_contact;
 
@@ -98,5 +98,6 @@ public class PropertyRent {
     @Column(name = "image_url")
     private List<String> imagesUrls;
 
+    // need to include bhk type to handle "1 RK"
 
 }

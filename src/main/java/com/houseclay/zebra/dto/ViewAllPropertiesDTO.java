@@ -2,6 +2,7 @@ package com.houseclay.zebra.dto;
 
 import lombok.*;
 
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -12,8 +13,13 @@ import java.util.UUID;
 @ToString
 public class ViewAllPropertiesDTO {
 
+
     private UUID property_id;
     private String name;
-    private String title;
+    private String bhkType;
+    private String locality;
+    private double rent;
+    private Date availableFrom;
+    private String furniture;
 
 }
